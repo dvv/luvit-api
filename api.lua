@@ -54,7 +54,7 @@ function API.parseFile(path, callback)
 
   local items = { }
 
-  Fs.read_file(path, function (err, text)
+  Fs.readFile(path, function (err, text)
     if not text then callback(err) ; return end
 
     -- tags to number lines of text
@@ -97,14 +97,17 @@ function API.parseFile(path, callback)
     -- FIXME: needed?!
     -- TODO: API.foo.bar['baz']
     -- TODO: catch initial value?
+    -- FIXME: API.foo = function also match...
     for name, value, line in numbered:gmatch('\n([_%a][_%w]*[.:][_%a][_%w]*) = (.-)%s*' .. number_tag) do
-      --p('VAR', name, args, line)
-      items[line] = {
-        line = line,
-        type = 'prop',
-        name = name,
-        value = value,
-      }
+      if value:find('function', 1, true) ~= 1 then
+        --p('VAR', name, args, line)
+        items[line] = {
+          line = line,
+          type = 'prop',
+          name = name,
+          value = value,
+        }
+      end
     end
 
     -- collect requires
@@ -247,7 +250,7 @@ API.parsePath(arguments, pattern, function (err, files)
 
     -- bind comments to corresponding items
     for i, r in ipairs(items) do
-      if r.type == 'function' or r.type == 'variable' or r.type == 'comment' then
+      if r.type == 'function' or r.type == 'variable' or r.type == 'comment' or r.type == 'prop' then
         local target = exports[r.type .. 's']
         local r1 = items[i - 1]
         if r1 and r1.type == 'comment' then
@@ -259,17 +262,9 @@ API.parsePath(arguments, pattern, function (err, files)
     --p(exports)
 
     print(filename)
-    print('Functions:')
-    p(exports.functions)
-    print('Properties:')
-    p(exports.props)
-    print('Variables:')
-    p(exports.variables)
-    print('Comments:')
-    p(exports.comments)
+    print(JSON.stringify(exports, { beautify = true, indent_string = '  ' }))
 
   end
-  --p(JSON.stringify(files))
 end)
 
 -- module
