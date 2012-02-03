@@ -1,11 +1,11 @@
 #!/usr/bin/env luvit
 
-local API = { }
+local API = {}
 
 local Table = require('table')
 local Path = require('path')
 local JSON = require('json')
-local Fs = require('meta-fs')
+local Fs = require('fs')
 
 --
 -- a simple command line arguments parser
@@ -13,8 +13,8 @@ local Fs = require('meta-fs')
 --
 local function parseArguments(argv)
   if not argv then argv = process.argv end
-  local opts = { }
-  local args = { }
+  local opts = {}
+  local args = {}
   for i, arg in ipairs(argv) do
     local opt = arg:match("^%-%-(.*)")
     if opt then
@@ -52,7 +52,7 @@ local flags, arguments = parseArguments()
 --
 function API.parseFile(path, callback)
 
-  local items = { }
+  local items = {}
 
   Fs.readFile(path, function (err, text)
     if not text then callback(err) ; return end
@@ -82,9 +82,20 @@ function API.parseFile(path, callback)
       return '\n'
     end)
 
-    -- collect exported function
+    -- collect exported functions
+    -- `function MODULE.func(args)` form
     for name, args, line in numbered:gmatch('\nfunction%s+([_%a][_%w]*[.:][_%a][_%w]*)(%b())%s*' .. number_tag) do
-      --p('FUNC', name, args, line)
+      items[line] = {
+        line = line,
+        type = 'function',
+        name = name,
+        args = args:sub(2, -2),
+      }
+    end
+
+    -- collect exported functions
+    -- `MODULE.func = function (args)` form
+    for name, args, line in numbered:gmatch('\n([_%a][_%w]*[.:][_%a][_%w]*) = function (%b())%s*' .. number_tag) do
       items[line] = {
         line = line,
         type = 'function',
@@ -94,24 +105,20 @@ function API.parseFile(path, callback)
     end
 
     -- collect exposed variables
-    -- FIXME: needed?!
-    -- TODO: API.foo.bar['baz']
-    -- TODO: catch initial value?
-    -- FIXME: API.foo = function also match...
     for name, value, line in numbered:gmatch('\n([_%a][_%w]*[.:][_%a][_%w]*) = (.-)%s*' .. number_tag) do
       if value:find('function', 1, true) ~= 1 then
-        --p('VAR', name, args, line)
         items[line] = {
           line = line,
-          type = 'prop',
+          type = 'variable',
           name = name,
           value = value,
         }
       end
     end
 
+    --[[
     -- collect requires
-    local requires = { }
+    local requires = {}
     for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = require(%b())%s*' .. number_tag) do
       items[line] = {
         line = line,
@@ -134,6 +141,7 @@ function API.parseFile(path, callback)
         extends = requires[value]
       }
     end
+    ]]--
 
     -- collect block comments
     for comment, line in numbered:gmatch('\n%-%-%[(%b[])%]' .. number_tag) do
@@ -169,7 +177,7 @@ function API.parseFile(path, callback)
     -- N.B. after that items[1] returns the first item in chronological order,
     --   and items['1'] -- the item at source line 1, if any
     do
-      local t = { }
+      local t = {}
       for k, v in pairs(items) do
         v.line = tonumber(v.line)
         t[#t + 1] = v
@@ -190,33 +198,21 @@ end
 --
 -- for each path in `paths` recursively parse all files matching `pattern`
 --
-function API.parsePath(paths, pattern, callback)
+function API.parsePath(paths, callback)
 
-  local files = { }
+  local files = {}
   local processed = 0
 
   -- for each path
-  for _, base_path in pairs(paths) do
+  for _, path in pairs(paths) do
 
     -- walk over files under that path
-    base_path = Path.resolve(process.cwd(), base_path)
-    Fs.find(base_path, {
-      -- parse all files that match the pattern
-      match_fn = function (path, stat, depth, cb)
-        if path:find(pattern) then
-          API.parseFile(path, function (err, file, text)
-            -- store parsed tokens
-            --p(path, path:sub(#base_path + 2), file)
-            files[path] = file
-            cb()
-          end)
-        else
-          cb()
-        end
-      end,
-
-    -- upon walk is complete
-    }, function (err)
+    base_path = Path.resolve(process.cwd(), path)
+    API.parseFile(path, function (err, file, text)
+      -- store parsed tokens
+      --p(path, path:sub(#base_path + 2), file)
+      files[path] = file
+      -- upon walk is complete
       processed = processed + 1
       if processed == #paths then
         -- report all parsed tokens
@@ -233,39 +229,41 @@ function API.parsePath(paths, pattern, callback)
 
 end
 
+local api = {}
 --
 -- process arguments
 --
-local pattern = flags.pattern or '%.lua$'
-API.parsePath(arguments, pattern, function (err, files)
+API.parsePath(arguments, function (err, files)
   for filename, items in pairs(files) do
 
     -- distribute items
     local exports = {
-      functions = { },
-      props = { },
-      variables = { },
-      comments = { },
+      functions = {},
+      variables = {},
+      --props = {},
+      --requires = {},
+      comments = {},
     }
 
     -- bind comments to corresponding items
     for i, r in ipairs(items) do
-      if r.type == 'function' or r.type == 'variable' or r.type == 'comment' or r.type == 'prop' then
-        local target = exports[r.type .. 's']
-        local r1 = items[i - 1]
-        if r1 and r1.type == 'comment' then
-          r.comment = r1.text
-        end
-        target[#target + 1] = r
+      local target = exports[r.type .. 's']
+assert(target, r.type)
+      local r1 = items[i - 1]
+      if r.type ~= 'comment' and r1 and r1.type == 'comment' then
+        r.comment = r1.text
       end
+      target[#target + 1] = r
     end
     --p(exports)
 
-    print(filename)
-    print(JSON.stringify(exports, { beautify = true, indent_string = '  ' }))
+    api[filename] = exports
 
   end
+
+  print(JSON.stringify(api, { beautify = true, indent_string = '  ' }))
 end)
+
 
 -- module
 return API
