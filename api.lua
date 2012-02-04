@@ -78,9 +78,9 @@ function API.parseFile(path, callback)
     end
 
     -- prune empty lines
-    numbered = numbered:gsub('\n' .. number_tag .. '\n', function ()
+    --[[numbered = numbered:gsub('\n' .. number_tag .. '\n', function ()
       return '\n'
-    end)
+    end)]]--
 
     -- collect exported functions
     -- `function MODULE.func(args)` form
@@ -109,14 +109,13 @@ function API.parseFile(path, callback)
       if value:find('function', 1, true) ~= 1 then
         items[line] = {
           line = line,
-          type = 'variable',
+          type = 'property',
           name = name,
           value = value,
         }
       end
     end
 
-    --[[
     -- collect requires
     local requires = {}
     for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = require(%b())%s*' .. number_tag) do
@@ -129,6 +128,7 @@ function API.parseFile(path, callback)
       requires[name] = items[line].value
     end
 
+    --[[
     -- collect inheritance
     --for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = (.-)%s*' .. number_tag) do
     for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = ([^\n]-):extend%(%)%s*' .. number_tag) do
@@ -148,6 +148,7 @@ function API.parseFile(path, callback)
       items[line] = {
         line = line,
         type = 'comment',
+        block = true,
         text = comment:gsub(number_tag, ''):sub(2, -2):gsub('^\n+', ''):gsub('\n+$', ''),
       }
     end
@@ -169,9 +170,6 @@ function API.parseFile(path, callback)
         text = comment,
       }
     end
-
-    -- TODO: employ more creationix's parts of parser?
-    -- ???
 
     -- duplicate records sorted by line number
     -- N.B. after that items[1] returns the first item in chronological order,
@@ -236,32 +234,86 @@ local api = {}
 API.parsePath(arguments, function (err, files)
   for filename, items in pairs(files) do
 
+    local href = '../../../luvit/luvit/blob/master/lib/' .. Path.basename(filename)
+
     -- distribute items
-    local exports = {
+    local mod = {
+      module = Path.basename(filename):gsub('%..-$', ''),
+      href = href,
+      --doc = nil,
       functions = {},
-      variables = {},
-      --props = {},
-      --requires = {},
-      comments = {},
+      properties = {},
+      classes = {},
     }
 
-    -- bind comments to corresponding items
     for i, r in ipairs(items) do
-      local target = exports[r.type .. 's']
-assert(target, r.type)
+      -- short name
+      if r.name then
+        r.short_name = r.name:gsub('^.+[.:]', '')
+      end
+      -- line to reference
+      r.href = href .. '#L' .. r.line
+      -- bind comments to lower adjacent items
       local r1 = items[i - 1]
       if r.type ~= 'comment' and r1 and r1.type == 'comment' then
-        r.comment = r1.text
+        r.doc = r1.text
       end
-      target[#target + 1] = r
+      -- the first block comment is module description
+      if r.type == 'comment' and r.block and not mod.doc then
+        mod.doc = r.text
+      end
+      -- distribute
+      if r.type == 'function' then
+        r.signature = 'function ' .. r.name .. '(' .. r.args .. ')'
+        mod.functions[#mod.functions + 1] = r
+      elseif r.type == 'property' then
+        mod.properties[#mod.properties + 1] = r
+      elseif r.type == 'class' then
+        mod.classes[#mod.classes + 1] = r
+      end
     end
-    --p(exports)
+    Table.sort(mod.properties, function (a, b) return a.name < b.name end)
+    Table.sort(mod.functions, function (a, b) return a.name < b.name end)
+    Table.sort(mod.classes, function (a, b) return a.name < b.name end)
+    --p(mod)
 
-    api[filename] = exports
+    api[mod.module] = mod
+    api[#api + 1] = mod
+    Table.sort(api, function (a, b) return a.module < b.module end)
 
   end
 
-  print(JSON.stringify(api, { beautify = true, indent_string = '  ' }))
+  --print(JSON.stringify(api['core'], { beautify = true, indent_string = '  ' }))
+
+  -- markdown
+  local o = {}
+  local function put(s, dont_separate)
+    if not dont_separate then
+      Table.insert(o, '')
+    end
+    Table.insert(o, s or '')
+  end
+  for _, mod in ipairs(api) do
+    put('## [' .. mod.module .. '](' .. mod.href .. ')')
+    if mod.doc then
+      put(mod.doc)
+    end
+    for _, v in ipairs(mod.properties) do
+      put('### [' .. v.short_name .. '](' .. v.href .. ')')
+      if v.doc then put(v.doc) end
+    end
+    for _, v in ipairs(mod.functions) do
+      put('### [' .. v.short_name .. '](' .. v.href .. ')')
+      if v.signature then put('```lua\n' .. v.signature .. '\n```') end
+      if v.doc then put(v.doc) end
+    end
+    for _, v in ipairs(mod.classes) do
+      put('### [' .. v.short_name .. '](' .. v.href .. ')')
+      if v.doc then put(v.doc) end
+    end
+  end
+  print(Table.concat(o, '\n') .. '\n')
+
 end)
 
 

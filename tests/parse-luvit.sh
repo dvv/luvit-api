@@ -1,2 +1,2 @@
 #!/bin/sh
-../api.lua ../../luvit/lib/*.lua >api.txt
+../api.lua ../../luvit/lib/*.lua >api.markdown
