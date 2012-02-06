@@ -82,38 +82,29 @@ function API.parseFile(path, callback)
       return '\n'
     end)]]--
 
-    -- collect exported functions
+    -- collect exported module-level functions
     -- `function MODULE.func(args)` form
-    for name, args, line in numbered:gmatch('\nfunction%s+([_%a][_%w]*[.:][_%a][_%w]*)(%b())%s*' .. number_tag) do
+    for parent, name, args, line in numbered:gmatch('\nfunction%s+([_%a][_%w]*)%.([_%a][_%w]*)(%b())%s*' .. number_tag) do
       items[line] = {
         line = line,
         type = 'function',
+        parent = parent,
         name = name,
         args = args:sub(2, -2),
       }
     end
 
-    -- collect exported functions
+    -- collect exported module-level functions
     -- `MODULE.func = function (args)` form
-    for name, args, line in numbered:gmatch('\n([_%a][_%w]*[.:][_%a][_%w]*) = function (%b())%s*' .. number_tag) do
+    -- FIXME: valid notation?
+    for parent, name, args, line in numbered:gmatch('\n([_%a][_%w]*)%.([_%a][_%w]*) = function (%b())%s*' .. number_tag) do
       items[line] = {
         line = line,
         type = 'function',
+        parent = parent,
         name = name,
         args = args:sub(2, -2),
       }
-    end
-
-    -- collect exposed variables
-    for name, value, line in numbered:gmatch('\n([_%a][_%w]*[.:][_%a][_%w]*) = (.-)%s*' .. number_tag) do
-      if value:find('function', 1, true) ~= 1 then
-        items[line] = {
-          line = line,
-          type = 'property',
-          name = name,
-          value = value,
-        }
-      end
     end
 
     -- collect requires
@@ -128,20 +119,52 @@ function API.parseFile(path, callback)
       requires[name] = items[line].value
     end
 
-    --[[
-    -- collect inheritance
-    --for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = (.-)%s*' .. number_tag) do
-    for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = ([^\n]-):extend%(%)%s*' .. number_tag) do
+    -- collect classes
+    local classes = {}
+    for name, parent, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = ([_%a][_%w]*):extend%b()%s*' .. number_tag) do
       --p('VAR', name, args, line)
       items[line] = {
         line = line,
-        type = 'variable',
+        type = 'class',
         name = name,
-        value = value,
-        extends = requires[value]
+        parent = parent,
+        properties = {},
+        methods = {},
       }
+      classes[name] = items[line]
     end
-    ]]--
+
+    -- collect prototypes
+    -- `function NAME:func(args)` form
+    for parent, name, args, line in numbered:gmatch('\nfunction%s+([_%a][_%w]*):([_%a][_%w]*)(%b())%s*' .. number_tag) do
+      items[line] = {
+        line = line,
+        type = 'method',
+        parent = parent,
+        name = name,
+        args = args:sub(2, -2),
+      }
+      if classes[parent] then
+        Table.insert(classes[parent].methods, items[line])
+      end
+    end
+
+    -- collect exposed variables
+    for parent, name, value, line in numbered:gmatch('\n([_%a][_%w]*)%.([_%a][_%w]*) = (.-)%s*' .. number_tag) do
+      if value:find('function', 1, true) ~= 1 then
+        items[line] = {
+          line = line,
+          --type = classes[parent] and 'property' or 'variable',
+          type = 'property',
+          parent = parent,
+          name = name,
+          value = value,
+        }
+        if classes[parent] then
+          Table.insert(classes[parent].properties, items[line])
+        end
+      end
+    end
 
     -- collect block comments
     for comment, line in numbered:gmatch('\n%-%-%[(%b[])%]' .. number_tag) do
@@ -276,6 +299,7 @@ API.parsePath(arguments, function (err, files)
     Table.sort(mod.functions, function (a, b) return a.name < b.name end)
     Table.sort(mod.classes, function (a, b) return a.name < b.name end)
     --p(mod)
+    require('fs').writeFile('api.json', JSON.stringify(api['core'], { beautify = true, indent_string = '  ' }), print)
 
     api[mod.module] = mod
     api[#api + 1] = mod
@@ -294,22 +318,47 @@ API.parsePath(arguments, function (err, files)
     Table.insert(o, s or '')
   end
   for _, mod in ipairs(api) do
-    put('## [' .. mod.module .. '](' .. mod.href .. ')')
+    put('## Module ' .. mod.module)
     if mod.doc then
       put(mod.doc)
     end
-    for _, v in ipairs(mod.properties) do
-      put('### [' .. v.short_name .. '](' .. v.href .. ')')
-      if v.doc then put(v.doc) end
+    if #mod.properties > 0 then
+      put('### Properties')
+      for _, v in ipairs(mod.properties) do
+        put('### [' .. v.short_name .. '](' .. v.href .. ')')
+        if v.doc then put(v.doc) end
+      end
     end
-    for _, v in ipairs(mod.functions) do
-      put('### [' .. v.short_name .. '](' .. v.href .. ')')
-      if v.signature then put('```lua\n' .. v.signature .. '\n```') end
-      if v.doc then put(v.doc) end
+    if #mod.functions > 0 then
+      put('### Functions')
+      for _, v in ipairs(mod.functions) do
+        put('### [' .. v.short_name .. '](' .. v.href .. ')')
+        if v.signature then put('```lua\n' .. v.signature .. '\n```') end
+        if v.doc then put(v.doc) end
+      end
     end
-    for _, v in ipairs(mod.classes) do
-      put('### [' .. v.short_name .. '](' .. v.href .. ')')
-      if v.doc then put(v.doc) end
+    if #mod.classes > 0 then
+      put('### Classes')
+      for _, v in ipairs(mod.classes) do
+        put('### Class [' .. v.short_name .. '](' .. v.href .. ')')
+        if v.parent then put('Extends ' .. v.parent) end
+        if v.doc then put(v.doc) end
+        if #v.properties > 0 then
+          put('#### Properties')
+          for _, v in ipairs(v.properties) do
+            put('#### [' .. v.short_name .. '](' .. v.href .. ')')
+            if v.doc then put(v.doc) end
+          end
+        end
+        if #v.methods > 0 then
+          put('#### Methods')
+          for _, v in ipairs(v.methods) do
+            put('#### [' .. v.short_name .. '](' .. v.href .. ')')
+            if v.signature then put('```lua\n' .. v.signature .. '\n```') end
+            if v.doc then put(v.doc) end
+          end
+        end
+      end
     end
   end
   print(Table.concat(o, '\n') .. '\n')
