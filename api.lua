@@ -53,6 +53,8 @@ local flags, arguments = parseArguments()
 function API.parseFile(path, callback)
 
   local items = {}
+  local classes = {}
+  local tree = {}
 
   Fs.readFile(path, function (err, text)
     if not text then callback(err) ; return end
@@ -62,6 +64,8 @@ function API.parseFile(path, callback)
     local number_head = '~~~<<<'
     local number_tail = '>>>~~~'
     local number_tag = number_head .. '(%d+)' .. number_tail
+
+    local name_re = '([_%w.:]*)'
 
     -- ensure final EOL
     -- FIXME: ensure we need this
@@ -82,48 +86,9 @@ function API.parseFile(path, callback)
       return '\n'
     end)]]--
 
-    -- collect exported module-level functions
-    -- `function MODULE.func(args)` form
-    for parent, name, args, line in numbered:gmatch('\nfunction%s+([_%a][_%w]*)%.([_%a][_%w]*)(%b())%s*' .. number_tag) do
-      items[line] = {
-        line = line,
-        type = 'function',
-        parent = parent,
-        name = name,
-        args = args:sub(2, -2),
-      }
-    end
-
-    -- collect exported module-level functions
-    -- `MODULE.func = function (args)` form
-    -- FIXME: valid notation?
-    for parent, name, args, line in numbered:gmatch('\n([_%a][_%w]*)%.([_%a][_%w]*) = function (%b())%s*' .. number_tag) do
-      items[line] = {
-        line = line,
-        type = 'function',
-        parent = parent,
-        name = name,
-        args = args:sub(2, -2),
-      }
-    end
-
-    -- collect requires
-    local requires = {}
-    for name, value, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = require(%b())%s*' .. number_tag) do
-      items[line] = {
-        line = line,
-        type = 'require',
-        name = name,
-        value = value:sub(3, -3),
-      }
-      requires[name] = items[line].value
-    end
-
     -- collect classes
-    local classes = {}
-    for name, parent, line in numbered:gmatch('\nlocal ([_%a][_%w]*) = ([_%a][_%w]*):extend%b()%s*' .. number_tag) do
-      --p('VAR', name, args, line)
-      items[line] = {
+    for name, parent, line in numbered:gmatch('\nlocal ' .. name_re .. ' = ' .. name_re .. ':extend%b()%s*' .. number_tag) do
+      local item = {
         line = line,
         type = 'class',
         name = name,
@@ -131,39 +96,61 @@ function API.parseFile(path, callback)
         properties = {},
         methods = {},
       }
-      classes[name] = items[line]
+      items[line] = item
+      --[[classes[name] = item
+      if not tree[parent] then
+        tree[parent] = {}
+      end
+      tree[parent].classes[name] = item]]--
     end
 
-    -- collect prototypes
-    -- `function NAME:func(args)` form
-    for parent, name, args, line in numbered:gmatch('\nfunction%s+([_%a][_%w]*):([_%a][_%w]*)(%b())%s*' .. number_tag) do
-      items[line] = {
+    -- collect exported module-level functions
+    -- `function MODULE.func(args)` form
+    for name, args, line in numbered:gmatch('\nfunction ' .. name_re .. '(%b())%s*' .. number_tag) do
+      local item = {
         line = line,
-        type = 'method',
-        parent = parent,
+        type = 'function',
         name = name,
         args = args:sub(2, -2),
       }
-      if classes[parent] then
-        Table.insert(classes[parent].methods, items[line])
+      items[line] = item
+    end
+
+    -- collect exported module-level functions
+    -- `MODULE.func = function (args)` form
+    -- FIXME: valid notation?
+    for name, args, line in numbered:gmatch('\n' .. name_re .. ' = function (%b())%s*' .. number_tag) do
+      local item = {
+        line = line,
+        type = 'function',
+        name = name,
+        args = args:sub(2, -2),
+      }
+      items[line] = item
+    end
+
+    -- collect exposed properties
+    for name, value, line in numbered:gmatch('\n' .. name_re .. ' = (.-)%s*' .. number_tag) do
+      if value:find('function', 1, true) ~= 1 then
+        local item= {
+          line = line,
+          type = 'property',
+          name = name,
+        }
+        items[line] = item
       end
     end
 
-    -- collect exposed variables
-    for parent, name, value, line in numbered:gmatch('\n([_%a][_%w]*)%.([_%a][_%w]*) = (.-)%s*' .. number_tag) do
-      if value:find('function', 1, true) ~= 1 then
-        items[line] = {
-          line = line,
-          --type = classes[parent] and 'property' or 'variable',
-          type = 'property',
-          parent = parent,
-          name = name,
-          value = value,
-        }
-        if classes[parent] then
-          Table.insert(classes[parent].properties, items[line])
-        end
-      end
+    -- collect requires
+    local requires = {}
+    for name, value, line in numbered:gmatch('\nlocal ' .. name_re .. ' = require(%b())%s*' .. number_tag) do
+      items[line] = {
+        line = line,
+        type = 'require',
+        name = name,
+        value = value:sub(3, -3),
+      }
+      requires[name] = items[line].value
     end
 
     -- collect block comments
@@ -255,6 +242,7 @@ local api = {}
 -- process arguments
 --
 API.parsePath(arguments, function (err, files)
+  require('fs').writeFile('api.json', JSON.stringify(files, { beautify = true, indent_string = '  ' }), print)
   for filename, items in pairs(files) do
 
     local href = '../../../luvit/luvit/blob/master/lib/' .. Path.basename(filename)
@@ -299,7 +287,7 @@ API.parsePath(arguments, function (err, files)
     Table.sort(mod.functions, function (a, b) return a.name < b.name end)
     Table.sort(mod.classes, function (a, b) return a.name < b.name end)
     --p(mod)
-    require('fs').writeFile('api.json', JSON.stringify(api['core'], { beautify = true, indent_string = '  ' }), print)
+    --require('fs').writeFile('api.json', JSON.stringify(api['core'], { beautify = true, indent_string = '  ' }), print)
 
     api[mod.module] = mod
     api[#api + 1] = mod

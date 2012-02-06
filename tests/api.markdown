@@ -5,37 +5,115 @@
 
 ### [Buffer](../../../luvit/luvit/blob/master/lib/buffer.lua#L31)
 
+### Functions
+
+### [__concat](../../../luvit/luvit/blob/master/lib/buffer.lua#L60)
+
+```lua
+function Buffer.meta:__concat(other)
+```
+
+### [__index](../../../luvit/luvit/blob/master/lib/buffer.lua#L64)
+
+```lua
+function Buffer.meta:__index(key)
+```
+
+### [__ipairs](../../../luvit/luvit/blob/master/lib/buffer.lua#L46)
+
+```lua
+function Buffer.meta:__ipairs()
+```
+
+### [__newindex](../../../luvit/luvit/blob/master/lib/buffer.lua#L72)
+
+```lua
+function Buffer.meta:__newindex(key, value)
+```
+
+### [__tostring](../../../luvit/luvit/blob/master/lib/buffer.lua#L56)
+
+```lua
+function Buffer.meta:__tostring()
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/buffer.lua#L33)
+
+```lua
+function Buffer:initialize(length)
+```
+
+### [inspect](../../../luvit/luvit/blob/master/lib/buffer.lua#L81)
+
+```lua
+function Buffer:inspect()
+```
+
+### [readInt16BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L119)
+
+```lua
+function Buffer:readInt16BE(offset)
+```
+
+### [readInt16LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L115)
+
+```lua
+function Buffer:readInt16LE(offset)
+```
+
+### [readInt32BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L141)
+
+```lua
+function Buffer:readInt32BE(offset)
+```
+
+### [readInt32LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L137)
+
+```lua
+function Buffer:readInt32LE(offset)
+```
+
+### [readInt8](../../../luvit/luvit/blob/master/lib/buffer.lua#L97)
+
+```lua
+function Buffer:readInt8(offset)
+```
+
+### [readUInt16BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L110)
+
+```lua
+function Buffer:readUInt16BE(offset)
+```
+
+### [readUInt16LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L105)
+
+```lua
+function Buffer:readUInt16LE(offset)
+```
+
+### [readUInt32BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L130)
+
+```lua
+function Buffer:readUInt32BE(offset)
+```
+
+### [readUInt32LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L123)
+
+```lua
+function Buffer:readUInt32LE(offset)
+```
+
+### [readUInt8](../../../luvit/luvit/blob/master/lib/buffer.lua#L93)
+
+```lua
+function Buffer:readUInt8(offset)
+```
+
 ### Classes
 
 ### Class [Buffer](../../../luvit/luvit/blob/master/lib/buffer.lua#L30)
 
 Extends Object
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/buffer.lua#L33)
-
-#### [inspect](../../../luvit/luvit/blob/master/lib/buffer.lua#L81)
-
-#### [readUInt8](../../../luvit/luvit/blob/master/lib/buffer.lua#L93)
-
-#### [readInt8](../../../luvit/luvit/blob/master/lib/buffer.lua#L97)
-
-#### [readUInt16LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L105)
-
-#### [readUInt16BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L110)
-
-#### [readInt16LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L115)
-
-#### [readInt16BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L119)
-
-#### [readUInt32LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L123)
-
-#### [readUInt32BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L130)
-
-#### [readInt32LE](../../../luvit/luvit/blob/master/lib/buffer.lua#L137)
-
-#### [readInt32BE](../../../luvit/luvit/blob/master/lib/buffer.lua#L141)
 
 ## Module childprocess
 
@@ -45,10 +123,22 @@ Extends Object
 
 ### Functions
 
+### [initialize](../../../luvit/luvit/blob/master/lib/childprocess.lua#L27)
+
+```lua
+function Process:initialize(command, args, options)
+```
+
+### [kill](../../../luvit/luvit/blob/master/lib/childprocess.lua#L51)
+
+```lua
+function Process:kill(signal)
+```
+
 ### [spawn](../../../luvit/luvit/blob/master/lib/childprocess.lua#L55)
 
 ```lua
-function spawn(...)
+function process.spawn(...)
 ```
 
 ### Classes
@@ -57,18 +147,14 @@ function spawn(...)
 
 Extends Handle
 
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/childprocess.lua#L27)
-
-#### [kill](../../../luvit/luvit/blob/master/lib/childprocess.lua#L51)
-
 ## Module core
 
 This module is for various classes and utilities that don't need their own
 module.
 
 ### Properties
+
+### [meta](../../../luvit/luvit/blob/master/lib/core.lua#L36)
 
 ### [Emitter](../../../luvit/luvit/blob/master/lib/core.lua#L98)
 
@@ -85,7 +171,189 @@ inheritance and inheritable constructors. All other objects inherit from this.
 
 ### [iStream](../../../luvit/luvit/blob/master/lib/core.lua#L278)
 
-### [meta](../../../luvit/luvit/blob/master/lib/core.lua#L36)
+### Functions
+
+### [emit](../../../luvit/luvit/blob/master/lib/core.lua#L136)
+
+```lua
+function Emitter:emit(name, ...)
+```
+
+Emit a named event to all listeners with optional data argument(s).
+
+### [missingHandlerType](../../../luvit/luvit/blob/master/lib/core.lua#L101)
+
+```lua
+function Emitter:missingHandlerType(name, ...)
+```
+
+By default, and error events that are not listened for should thow errors
+
+### [on](../../../luvit/luvit/blob/master/lib/core.lua#L118)
+
+```lua
+function Emitter:on(name, callback)
+```
+
+Adds an event listener (`callback`) for the named event `name`.
+
+### [once](../../../luvit/luvit/blob/master/lib/core.lua#L109)
+
+```lua
+function Emitter:once(name, callback)
+```
+
+Same as `Emitter:on` except it de-registers itself after the first event.
+
+### [removeListener](../../../luvit/luvit/blob/master/lib/core.lua#L159)
+
+```lua
+function Emitter:removeListener(name, callback)
+```
+
+Remove a listener so that it no longer catches events.
+
+### [wrap](../../../luvit/luvit/blob/master/lib/core.lua#L185)
+
+```lua
+function Emitter:wrap(name)
+```
+
+Utility that binds the named method `self[name]` for use as a callback.  The
+first argument (`err`) is re-routed to the "error" event instead.
+
+    local Joystick = Emitter:extend()
+    function Joystick:initialize(device)
+      self:wrap("onOpen")
+      FS.open(device, self.onOpen)
+    end
+
+    function Joystick:onOpen(fd)
+      -- and so forth
+    end
+
+### [__tostring](../../../luvit/luvit/blob/master/lib/core.lua#L289)
+
+```lua
+function Error.meta.__tostring(table)
+```
+
+Make errors tostringable
+
+### [initialize](../../../luvit/luvit/blob/master/lib/core.lua#L293)
+
+```lua
+function Error:initialize(message)
+```
+
+### [addHandlerType](../../../luvit/luvit/blob/master/lib/core.lua#L212)
+
+```lua
+function Handle:addHandlerType(name)
+```
+
+This is used by Emitters to register with native events when the first listener
+is added.
+
+### [close](../../../luvit/luvit/blob/master/lib/core.lua#L203)
+
+```lua
+function Handle:close()
+```
+
+Wrapper around `uv_close`. Closes the underlying file descriptor of a handle.
+
+### [setHandler](../../../luvit/luvit/blob/master/lib/core.lua#L223)
+
+```lua
+function Handle:setHandler(name, callback)
+```
+
+Set or replace the handler for a native event.  Usually `Emitter:on()` is what
+you want, not this.
+
+### [create](../../../luvit/luvit/blob/master/lib/core.lua#L39)
+
+```lua
+function Object:create()
+```
+
+Create a new instance of this object
+
+### [extend](../../../luvit/luvit/blob/master/lib/core.lua#L76)
+
+```lua
+function Object:extend()
+```
+
+Creates a new sub-class.
+
+    local Square = Rectangle:extend()
+    function Square:initialize(w)
+      self.w = w
+      self.h = h
+    end
+
+### [new](../../../luvit/luvit/blob/master/lib/core.lua#L59)
+
+```lua
+function Object:new(...)
+```
+
+Creates a new instance and calls `obj:initialize(...)` if it exists.
+
+    local Rectangle = Object:extend()
+    function Rectangle:initialize(w, h)
+      self.w = w
+      self.h = h
+    end
+    function Rectangle:getArea()
+      return self.w * self.h
+    end
+    local rect = Rectangle:new(3, 4)
+    p(rect:getArea())
+
+### [accept](../../../luvit/luvit/blob/master/lib/core.lua#L246)
+
+```lua
+function Stream:accept(other_stream)
+```
+
+### [listen](../../../luvit/luvit/blob/master/lib/core.lua#L241)
+
+```lua
+function Stream:listen(callback)
+```
+
+### [pipe](../../../luvit/luvit/blob/master/lib/core.lua#L262)
+
+```lua
+function Stream:pipe(target)
+```
+
+### [readStart](../../../luvit/luvit/blob/master/lib/core.lua#L250)
+
+```lua
+function Stream:readStart()
+```
+
+### [readStop](../../../luvit/luvit/blob/master/lib/core.lua#L254)
+
+```lua
+function Stream:readStop()
+```
+
+### [shutdown](../../../luvit/luvit/blob/master/lib/core.lua#L237)
+
+```lua
+function Stream:shutdown()
+```
+
+### [write](../../../luvit/luvit/blob/master/lib/core.lua#L258)
+
+```lua
+function Stream:write(chunk, callback)
+```
 
 ### Classes
 
@@ -105,54 +373,11 @@ Also it can easily be sub-classed.
     local c = Custom:new()
     c:on('bar', onBar)
 
-#### Methods
-
-#### [missingHandlerType](../../../luvit/luvit/blob/master/lib/core.lua#L101)
-
-By default, and error events that are not listened for should thow errors
-
-#### [once](../../../luvit/luvit/blob/master/lib/core.lua#L109)
-
-Same as `Emitter:on` except it de-registers itself after the first event.
-
-#### [on](../../../luvit/luvit/blob/master/lib/core.lua#L118)
-
-Adds an event listener (`callback`) for the named event `name`.
-
-#### [emit](../../../luvit/luvit/blob/master/lib/core.lua#L136)
-
-Emit a named event to all listeners with optional data argument(s).
-
-#### [removeListener](../../../luvit/luvit/blob/master/lib/core.lua#L159)
-
-Remove a listener so that it no longer catches events.
-
-#### [wrap](../../../luvit/luvit/blob/master/lib/core.lua#L185)
-
-Utility that binds the named method `self[name]` for use as a callback.  The
-first argument (`err`) is re-routed to the "error" event instead.
-
-    local Joystick = Emitter:extend()
-    function Joystick:initialize(device)
-      self:wrap("onOpen")
-      FS.open(device, self.onOpen)
-    end
-
-    function Joystick:onOpen(fd)
-      -- and so forth
-    end
-
 ### Class [Error](../../../luvit/luvit/blob/master/lib/core.lua#L285)
 
 Extends Object
 
 This is for code that wants structured error messages.
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/core.lua#L293)
-
-Make errors tostringable
 
 ### Class [Handle](../../../luvit/luvit/blob/master/lib/core.lua#L199)
 
@@ -161,44 +386,12 @@ Extends Emitter
 This class is never used directly, but is the inheritance chain of all libuv
 objects.
 
-#### Methods
-
-#### [close](../../../luvit/luvit/blob/master/lib/core.lua#L203)
-
-Wrapper around `uv_close`. Closes the underlying file descriptor of a handle.
-
-#### [addHandlerType](../../../luvit/luvit/blob/master/lib/core.lua#L212)
-
-This is used by Emitters to register with native events when the first listener
-is added.
-
-#### [setHandler](../../../luvit/luvit/blob/master/lib/core.lua#L223)
-
-Set or replace the handler for a native event.  Usually `Emitter:on()` is what
-you want, not this.
-
 ### Class [Stream](../../../luvit/luvit/blob/master/lib/core.lua#L234)
 
 Extends Handle
 
 This is never used directly.  If you want to create a pure Lua stream, subclass
 or instantiate `core.iStream`.
-
-#### Methods
-
-#### [shutdown](../../../luvit/luvit/blob/master/lib/core.lua#L237)
-
-#### [listen](../../../luvit/luvit/blob/master/lib/core.lua#L241)
-
-#### [accept](../../../luvit/luvit/blob/master/lib/core.lua#L246)
-
-#### [readStart](../../../luvit/luvit/blob/master/lib/core.lua#L250)
-
-#### [readStop](../../../luvit/luvit/blob/master/lib/core.lua#L254)
-
-#### [write](../../../luvit/luvit/blob/master/lib/core.lua#L258)
-
-#### [pipe](../../../luvit/luvit/blob/master/lib/core.lua#L262)
 
 ### Class [iStream](../../../luvit/luvit/blob/master/lib/core.lua#L277)
 
@@ -214,79 +407,79 @@ contain a uv struct (it's pure lua)
 ### [isIp](../../../luvit/luvit/blob/master/lib/dns.lua#L108)
 
 ```lua
-function isIp(ip)
+function dns.isIp(ip)
 ```
 
 ### [isIpV4](../../../luvit/luvit/blob/master/lib/dns.lua#L112)
 
 ```lua
-function isIpV4(ip)
+function dns.isIpV4(ip)
 ```
 
 ### [isIpV6](../../../luvit/luvit/blob/master/lib/dns.lua#L116)
 
 ```lua
-function isIpV6(ip)
+function dns.isIpV6(ip)
 ```
 
 ### [lookup](../../../luvit/luvit/blob/master/lib/dns.lua#L74)
 
 ```lua
-function lookup(domain, family, callback)
+function dns.lookup(domain, family, callback)
 ```
 
 ### [resolve](../../../luvit/luvit/blob/master/lib/dns.lua#L58)
 
 ```lua
-function resolve(domain, rrtype, callback)
+function dns.resolve(domain, rrtype, callback)
 ```
 
 ### [resolve4](../../../luvit/luvit/blob/master/lib/dns.lua#L26)
 
 ```lua
-function resolve4(domain, callback)
+function dns.resolve4(domain, callback)
 ```
 
 ### [resolve6](../../../luvit/luvit/blob/master/lib/dns.lua#L30)
 
 ```lua
-function resolve6(domain, callback)
+function dns.resolve6(domain, callback)
 ```
 
 ### [resolveCname](../../../luvit/luvit/blob/master/lib/dns.lua#L34)
 
 ```lua
-function resolveCname(domain, callback)
+function dns.resolveCname(domain, callback)
 ```
 
 ### [resolveMx](../../../luvit/luvit/blob/master/lib/dns.lua#L50)
 
 ```lua
-function resolveMx(domain, callback)
+function dns.resolveMx(domain, callback)
 ```
 
 ### [resolveNs](../../../luvit/luvit/blob/master/lib/dns.lua#L38)
 
 ```lua
-function resolveNs(domain, callback)
+function dns.resolveNs(domain, callback)
 ```
 
 ### [resolveSrv](../../../luvit/luvit/blob/master/lib/dns.lua#L42)
 
 ```lua
-function resolveSrv(domain, callback)
+function dns.resolveSrv(domain, callback)
 ```
 
 ### [resolveTxt](../../../luvit/luvit/blob/master/lib/dns.lua#L46)
 
 ```lua
-function resolveTxt(domain, callback)
+function dns.resolveTxt(domain, callback)
 ```
 
 ### [reverse](../../../luvit/luvit/blob/master/lib/dns.lua#L54)
 
 ```lua
-function reverse(ip, callback)
+function dns.reverse(ip, callback)
 ```
 
 ## Module fiber
@@ -296,7 +489,7 @@ function reverse(ip, callback)
 ### [new](../../../luvit/luvit/blob/master/lib/fiber.lua#L22)
 
 ```lua
-function new(fn)
+function fiber.new(fn)
 ```
 
 ## Module fs
@@ -307,10 +500,16 @@ function new(fn)
 
 ### Functions
 
+### [initialize](../../../luvit/luvit/blob/master/lib/fs.lua#L238)
+
+```lua
+function Watcher:initialize(path)
+```
+
 ### [createReadStream](../../../luvit/luvit/blob/master/lib/fs.lua#L129)
 
 ```lua
-function createReadStream(path, options)
+function fs.createReadStream(path, options)
 ```
 
 TODO: Implement backpressure here and in tcp streams
@@ -318,13 +517,13 @@ TODO: Implement backpressure here and in tcp streams
 ### [createWriteStream](../../../luvit/luvit/blob/master/lib/fs.lua#L174)
 
 ```lua
-function createWriteStream(path, options)
+function fs.createWriteStream(path, options)
 ```
 
 ### [exists](../../../luvit/luvit/blob/master/lib/fs.lua#L94)
 
 ```lua
-function exists(path, callback)
+function fs.exists(path, callback)
 ```
 
 Wrap the core fs functions in forced sync and async versions
@@ -332,25 +531,25 @@ Wrap the core fs functions in forced sync and async versions
 ### [existsSync](../../../luvit/luvit/blob/master/lib/fs.lua#L106)
 
 ```lua
-function existsSync(path)
+function fs.existsSync(path)
 ```
 
 ### [readFile](../../../luvit/luvit/blob/master/lib/fs.lua#L201)
 
 ```lua
-function readFile(path, callback)
+function fs.readFile(path, callback)
 ```
 
 ### [readFileSync](../../../luvit/luvit/blob/master/lib/fs.lua#L184)
 
 ```lua
-function readFileSync(path)
+function fs.readFileSync(path)
 ```
 
 ### [writeFile](../../../luvit/luvit/blob/master/lib/fs.lua#L215)
 
 ```lua
-function writeFile(path, data, callback)
+function fs.writeFile(path, data, callback)
 ```
 
 ### Classes
@@ -359,19 +558,9 @@ function writeFile(path, data, callback)
 
 Extends Handle
 
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/fs.lua#L238)
-
 ## Module http
 
 ### Properties
-
-### [Request](../../../luvit/luvit/blob/master/lib/http.lua#L87)
-
-### [Response](../../../luvit/luvit/blob/master/lib/http.lua#L100)
-
-### [STATUS_CODES](../../../luvit/luvit/blob/master/lib/http.lua#L82)
 
 ### [auto_chunked_encoding](../../../luvit/luvit/blob/master/lib/http.lua#L112)
 
@@ -383,18 +572,109 @@ Extends Handle
 
 ### [auto_server](../../../luvit/luvit/blob/master/lib/http.lua#L111)
 
+### [Request](../../../luvit/luvit/blob/master/lib/http.lua#L87)
+
+### [Response](../../../luvit/luvit/blob/master/lib/http.lua#L100)
+
+### [STATUS_CODES](../../../luvit/luvit/blob/master/lib/http.lua#L82)
+
 ### Functions
+
+### [close](../../../luvit/luvit/blob/master/lib/http.lua#L93)
+
+```lua
+function Request:close(...)
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/http.lua#L89)
+
+```lua
+function Request:initialize(socket)
+```
+
+### [addHeader](../../../luvit/luvit/blob/master/lib/http.lua#L136)
+
+```lua
+function Response:addHeader(name, value)
+```
+
+Adds a header line.  This does not replace any header by the same name and
+allows duplicate headers.  Returns the index it was inserted at
+
+### [close](../../../luvit/luvit/blob/master/lib/http.lua#L301)
+
+```lua
+function Response:close(...)
+```
+
+### [finish](../../../luvit/luvit/blob/master/lib/http.lua#L266)
+
+```lua
+function Response:finish(chunk, callback)
+```
+
+### [flushHead](../../../luvit/luvit/blob/master/lib/http.lua#L152)
+
+```lua
+function Response:flushHead(callback)
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/http.lua#L102)
+
+```lua
+function Response:initialize(socket)
+```
+
+### [setCode](../../../luvit/luvit/blob/master/lib/http.lua#L116)
+
+```lua
+function Response:setCode(code)
+```
+
+### [setHeader](../../../luvit/luvit/blob/master/lib/http.lua#L122)
+
+```lua
+function Response:setHeader(name, value)
+```
+
+This sets a header, replacing any header with the same name (case insensitive)
+
+### [unsetHeader](../../../luvit/luvit/blob/master/lib/http.lua#L143)
+
+```lua
+function Response:unsetHeader(name)
+```
+
+Removes a set header.  Cannot remove headers added with :addHeader
+
+### [write](../../../luvit/luvit/blob/master/lib/http.lua#L252)
+
+```lua
+function Response:write(chunk, callback)
+```
+
+### [writeContinue](../../../luvit/luvit/blob/master/lib/http.lua#L248)
+
+```lua
+function Response:writeContinue(callback)
+```
+
+### [writeHead](../../../luvit/luvit/blob/master/lib/http.lua#L234)
+
+```lua
+function Response:writeHead(code, headers, callback)
+```
 
 ### [createServer](../../../luvit/luvit/blob/master/lib/http.lua#L382)
 
 ```lua
-function createServer(host, port, onConnection)
+function http.createServer(host, port, onConnection)
 ```
 
 ### [request](../../../luvit/luvit/blob/master/lib/http.lua#L307)
 
 ```lua
-function request(options, callback)
+function http.request(options, callback)
 ```
 
 ### Classes
@@ -403,58 +683,9 @@ function request(options, callback)
 
 Extends iStream
 
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/http.lua#L89)
-
-#### [close](../../../luvit/luvit/blob/master/lib/http.lua#L93)
-
 ### Class [Response](../../../luvit/luvit/blob/master/lib/http.lua#L99)
 
 Extends iStream
-
-#### Properties
-
-#### [auto_date](../../../luvit/luvit/blob/master/lib/http.lua#L110)
-
-#### [auto_server](../../../luvit/luvit/blob/master/lib/http.lua#L111)
-
-#### [auto_chunked_encoding](../../../luvit/luvit/blob/master/lib/http.lua#L112)
-
-#### [auto_content_length](../../../luvit/luvit/blob/master/lib/http.lua#L113)
-
-#### [auto_content_type](../../../luvit/luvit/blob/master/lib/http.lua#L114)
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/http.lua#L102)
-
-#### [setCode](../../../luvit/luvit/blob/master/lib/http.lua#L116)
-
-#### [setHeader](../../../luvit/luvit/blob/master/lib/http.lua#L122)
-
-This sets a header, replacing any header with the same name (case insensitive)
-
-#### [addHeader](../../../luvit/luvit/blob/master/lib/http.lua#L136)
-
-Adds a header line.  This does not replace any header by the same name and
-allows duplicate headers.  Returns the index it was inserted at
-
-#### [unsetHeader](../../../luvit/luvit/blob/master/lib/http.lua#L143)
-
-Removes a set header.  Cannot remove headers added with :addHeader
-
-#### [flushHead](../../../luvit/luvit/blob/master/lib/http.lua#L152)
-
-#### [writeHead](../../../luvit/luvit/blob/master/lib/http.lua#L234)
-
-#### [writeContinue](../../../luvit/luvit/blob/master/lib/http.lua#L248)
-
-#### [write](../../../luvit/luvit/blob/master/lib/http.lua#L252)
-
-#### [finish](../../../luvit/luvit/blob/master/lib/http.lua#L266)
-
-#### [close](../../../luvit/luvit/blob/master/lib/http.lua#L301)
 
 ## Module json
 
@@ -463,24 +694,28 @@ Removes a set header.  Cannot remove headers added with :addHeader
 ### [parse](../../../luvit/luvit/blob/master/lib/json.lua#L101)
 
 ```lua
-function parse(string, options)
+function JSON.parse(string, options)
 ```
 
 ### [streamingParser](../../../luvit/luvit/blob/master/lib/json.lua#L25)
 
 ```lua
-function streamingParser(callback, options)
+function JSON.streamingParser(callback, options)
 ```
 
 ### [stringify](../../../luvit/luvit/blob/master/lib/json.lua#L111)
 
 ```lua
-function stringify(value, options)
+function JSON.stringify(value, options)
 ```
 
 ## Module luvit
 
 ### Properties
+
+### [date](../../../luvit/luvit/blob/master/lib/luvit.lua#L53)
+
+### [time](../../../luvit/luvit/blob/master/lib/luvit.lua#L54)
 
 ### [HTTP_VERSION](../../../luvit/luvit/blob/master/lib/luvit.lua#L70)
 
@@ -492,29 +727,15 @@ function stringify(value, options)
 
 ### [YAJL_VERSION](../../../luvit/luvit/blob/master/lib/luvit.lua#L67)
 
-### [argv](../../../luvit/luvit/blob/master/lib/luvit.lua#L95)
-
 ### [argv](../../../luvit/luvit/blob/master/lib/luvit.lua#L96)
 
 ### [bit](../../../luvit/luvit/blob/master/lib/luvit.lua#L27)
 
-### [config](../../../luvit/luvit/blob/master/lib/luvit.lua#L308)
-
 ### [coroutine](../../../luvit/luvit/blob/master/lib/luvit.lua#L25)
-
-### [cpath](../../../luvit/luvit/blob/master/lib/luvit.lua#L305)
-
-### [cwd](../../../luvit/luvit/blob/master/lib/luvit.lua#L93)
-
-### [date](../../../luvit/luvit/blob/master/lib/luvit.lua#L53)
 
 ### [debug](../../../luvit/luvit/blob/master/lib/luvit.lua#L28)
 
 ### [dofile](../../../luvit/luvit/blob/master/lib/luvit.lua#L31)
-
-### [env](../../../luvit/luvit/blob/master/lib/luvit.lua#L169)
-
-Add global access to the environment variables using a dynamic table
 
 ### [getcwd](../../../luvit/luvit/blob/master/lib/luvit.lua#L94)
 
@@ -525,10 +746,6 @@ This will break lua code written for other lua runtimes
 
 ### [jit](../../../luvit/luvit/blob/master/lib/luvit.lua#L26)
 
-### [loaders](../../../luvit/luvit/blob/master/lib/luvit.lua#L303)
-
-Remove the cwd based loaders, we don't want them
-
 ### [loadfile](../../../luvit/luvit/blob/master/lib/luvit.lua#L30)
 
 ### [math](../../../luvit/luvit/blob/master/lib/luvit.lua#L23)
@@ -537,13 +754,43 @@ Remove the cwd based loaders, we don't want them
 
 ### [os](../../../luvit/luvit/blob/master/lib/luvit.lua#L22)
 
+### [print](../../../luvit/luvit/blob/master/lib/luvit.lua#L33)
+
+### [string](../../../luvit/luvit/blob/master/lib/luvit.lua#L24)
+
+### [table](../../../luvit/luvit/blob/master/lib/luvit.lua#L29)
+
+### [error_meta](../../../luvit/luvit/blob/master/lib/luvit.lua#L202)
+
+### [config](../../../luvit/luvit/blob/master/lib/luvit.lua#L308)
+
+### [cpath](../../../luvit/luvit/blob/master/lib/luvit.lua#L305)
+
+### [os](../../../luvit/luvit/blob/master/lib/luvit.lua#L50)
+
+### [os_binding](../../../luvit/luvit/blob/master/lib/luvit.lua#L52)
+
+### [loaders](../../../luvit/luvit/blob/master/lib/luvit.lua#L303)
+
+Remove the cwd based loaders, we don't want them
+
 ### [path](../../../luvit/luvit/blob/master/lib/luvit.lua#L304)
 
-### [print](../../../luvit/luvit/blob/master/lib/luvit.lua#L33)
+### [os_binding](../../../luvit/luvit/blob/master/lib/luvit.lua#L51)
 
 ### [searchpath](../../../luvit/luvit/blob/master/lib/luvit.lua#L306)
 
 ### [seeall](../../../luvit/luvit/blob/master/lib/luvit.lua#L307)
+
+### [process](../../../luvit/luvit/blob/master/lib/luvit.lua#L56)
+
+### [argv](../../../luvit/luvit/blob/master/lib/luvit.lua#L95)
+
+### [cwd](../../../luvit/luvit/blob/master/lib/luvit.lua#L93)
+
+### [env](../../../luvit/luvit/blob/master/lib/luvit.lua#L169)
+
+Add global access to the environment variables using a dynamic table
 
 ### [stdin](../../../luvit/luvit/blob/master/lib/luvit.lua#L123)
 
@@ -552,22 +799,67 @@ But don't hold the event loop open for them
 
 ### [stdout](../../../luvit/luvit/blob/master/lib/luvit.lua#L124)
 
-### [string](../../../luvit/luvit/blob/master/lib/luvit.lua#L24)
-
-### [table](../../../luvit/luvit/blob/master/lib/luvit.lua#L29)
-
-### [time](../../../luvit/luvit/blob/master/lib/luvit.lua#L54)
-
 ### [version](../../../luvit/luvit/blob/master/lib/luvit.lua#L58)
 
 ### [versions](../../../luvit/luvit/blob/master/lib/luvit.lua#L59)
 
 ### Functions
 
+### [debug](../../../luvit/luvit/blob/master/lib/luvit.lua#L156)
+
+```lua
+function debug(...)
+```
+
+Like p, but prints to stderr using blocking I/O for better debugging
+
+### [eventSource](../../../luvit/luvit/blob/master/lib/luvit.lua#L195)
+
+```lua
+function eventSource(name, fn, ...)
+```
+
+This is called by all the event sources from C
+The user can override it to hook into event sources
+
+### [p](../../../luvit/luvit/blob/master/lib/luvit.lua#L143)
+
+```lua
+function p(...)
+```
+
+A nice global data dumper
+
+### [print](../../../luvit/luvit/blob/master/lib/luvit.lua#L131)
+
+```lua
+function print(...)
+```
+
+Replace print
+
 ### [exit](../../../luvit/luvit/blob/master/lib/luvit.lua#L72)
 
 ```lua
-function exit(exit_code)
+function process.exit(exit_code)
+```
+
+### [addHandlerType](../../../luvit/luvit/blob/master/lib/luvit.lua#L77)
+
+```lua
+function process:addHandlerType(name)
+```
+
+### [missingHandlerType](../../../luvit/luvit/blob/master/lib/luvit.lua#L85)
+
+```lua
+function process:missingHandlerType(name, ...)
+```
+
+### [require](../../../luvit/luvit/blob/master/lib/luvit.lua#L311)
+
+```lua
+function require(filepath, dirname)
 ```
 
 ## Module mime
@@ -583,7 +875,7 @@ function exit(exit_code)
 ### [getType](../../../luvit/luvit/blob/master/lib/mime.lua#L199)
 
 ```lua
-function getType(path)
+function mime.getType(path)
 ```
 
 ## Module net
@@ -596,39 +888,77 @@ function getType(path)
 
 ### [create](../../../luvit/luvit/blob/master/lib/net.lua#L193)
 
+### Functions
+
+### [close](../../../luvit/luvit/blob/master/lib/net.lua#L65)
+
+```lua
+function Server:close()
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/net.lua#L73)
+
+```lua
+function Server:initialize(...)
+```
+
+### [listen](../../../luvit/luvit/blob/master/lib/net.lua#L31)
+
+```lua
+function Server:listen(port, ... --[[ ip, callback --]] )
+```
+
+### [_connect](../../../luvit/luvit/blob/master/lib/net.lua#L92)
+
+```lua
+function Socket:_connect(address, port, addressType)
+```
+
+### [close](../../../luvit/luvit/blob/master/lib/net.lua#L117)
+
+```lua
+function Socket:close()
+```
+
+### [connect](../../../luvit/luvit/blob/master/lib/net.lua#L132)
+
+```lua
+function Socket:connect(port, host, callback)
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/net.lua#L168)
+
+```lua
+function Socket:initialize()
+```
+
+### [pipe](../../../luvit/luvit/blob/master/lib/net.lua#L123)
+
+```lua
+function Socket:pipe(destination)
+```
+
+### [setTimeout](../../../luvit/luvit/blob/master/lib/net.lua#L105)
+
+```lua
+function Socket:setTimeout(msecs, callback)
+```
+
+### [write](../../../luvit/luvit/blob/master/lib/net.lua#L127)
+
+```lua
+function Socket:write(data, callback)
+```
+
 ### Classes
 
 ### Class [Server](../../../luvit/luvit/blob/master/lib/net.lua#L29)
 
 Extends Emitter
 
-#### Methods
-
-#### [listen](../../../luvit/luvit/blob/master/lib/net.lua#L31)
-
-#### [close](../../../luvit/luvit/blob/master/lib/net.lua#L65)
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/net.lua#L73)
-
 ### Class [Socket](../../../luvit/luvit/blob/master/lib/net.lua#L90)
 
 Extends Emitter
-
-#### Methods
-
-#### [_connect](../../../luvit/luvit/blob/master/lib/net.lua#L92)
-
-#### [setTimeout](../../../luvit/luvit/blob/master/lib/net.lua#L105)
-
-#### [close](../../../luvit/luvit/blob/master/lib/net.lua#L117)
-
-#### [pipe](../../../luvit/luvit/blob/master/lib/net.lua#L123)
-
-#### [write](../../../luvit/luvit/blob/master/lib/net.lua#L127)
-
-#### [connect](../../../luvit/luvit/blob/master/lib/net.lua#L132)
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/net.lua#L168)
 
 ## Module path
 
@@ -637,31 +967,31 @@ Extends Emitter
 ### [basename](../../../luvit/luvit/blob/master/lib/path.lua#L110)
 
 ```lua
-function basename(filepath, expected_ext)
+function path.basename(filepath, expected_ext)
 ```
 
 ### [dirname](../../../luvit/luvit/blob/master/lib/path.lua#L92)
 
 ```lua
-function dirname(filepath)
+function path.dirname(filepath)
 ```
 
 ### [extname](../../../luvit/luvit/blob/master/lib/path.lua#L114)
 
 ```lua
-function extname(filepath)
+function path.extname(filepath)
 ```
 
 ### [join](../../../luvit/luvit/blob/master/lib/path.lua#L81)
 
 ```lua
-function join(...)
+function path.join(...)
 ```
 
 ### [normalize](../../../luvit/luvit/blob/master/lib/path.lua#L55)
 
 ```lua
-function normalize(filepath)
+function path.normalize(filepath)
 ```
 
 Modifies an array of path parts in place by interpreting "." and ".." segments
@@ -669,7 +999,7 @@ Modifies an array of path parts in place by interpreting "." and ".." segments
 ### [resolve](../../../luvit/luvit/blob/master/lib/path.lua#L85)
 
 ```lua
-function resolve(root, filepath)
+function path.resolve(root, filepath)
 ```
 
 ## Module pipe
@@ -678,21 +1008,37 @@ function resolve(root, filepath)
 
 ### [Pipe](../../../luvit/luvit/blob/master/lib/pipe.lua#L25)
 
+### Functions
+
+### [bind](../../../luvit/luvit/blob/master/lib/pipe.lua#L35)
+
+```lua
+function Pipe:bind(name)
+```
+
+### [connect](../../../luvit/luvit/blob/master/lib/pipe.lua#L39)
+
+```lua
+function Pipe:connect(name)
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/pipe.lua#L27)
+
+```lua
+function Pipe:initialize(ipc)
+```
+
+### [open](../../../luvit/luvit/blob/master/lib/pipe.lua#L31)
+
+```lua
+function Pipe:open(fd)
+```
+
 ### Classes
 
 ### Class [Pipe](../../../luvit/luvit/blob/master/lib/pipe.lua#L24)
 
 Extends Stream
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/pipe.lua#L27)
-
-#### [open](../../../luvit/luvit/blob/master/lib/pipe.lua#L31)
-
-#### [bind](../../../luvit/luvit/blob/master/lib/pipe.lua#L35)
-
-#### [connect](../../../luvit/luvit/blob/master/lib/pipe.lua#L39)
 
 ## Module querystring
 
@@ -704,7 +1050,7 @@ urldecode tokens.
 ### [parse](../../../luvit/luvit/blob/master/lib/querystring.lua#L68)
 
 ```lua
-function parse(str, sep, eq)
+function querystring.parse(str, sep, eq)
 ```
 
 parse querystring into table.
@@ -713,7 +1059,7 @@ urldecode tokens.
 ### [urldecode](../../../luvit/luvit/blob/master/lib/querystring.lua#L38)
 
 ```lua
-function urldecode(str)
+function querystring.urldecode(str)
 ```
 
 decode %XX sequences
@@ -726,7 +1072,7 @@ for purpose of documentation
 ### [urlencode](../../../luvit/luvit/blob/master/lib/querystring.lua#L53)
 
 ```lua
-function urlencode(str)
+function querystring.urlencode(str)
 ```
 
 this comment
@@ -744,13 +1090,13 @@ for purpose of documentation
 ### [evaluateLine](../../../luvit/luvit/blob/master/lib/repl.lua#L39)
 
 ```lua
-function evaluateLine(line)
+function repl.evaluateLine(line)
 ```
 
 ### [start](../../../luvit/luvit/blob/master/lib/repl.lua#L80)
 
 ```lua
-function start()
+function repl.start()
 ```
 
 ## Module stack
@@ -760,7 +1106,7 @@ function start()
 ### [compose](../../../luvit/luvit/blob/master/lib/stack.lua#L49)
 
 ```lua
-function compose(...)
+function stack.compose(...)
 ```
 
 Build a composite stack made of several layers
@@ -768,13 +1114,13 @@ Build a composite stack made of several layers
 ### [errorHandler](../../../luvit/luvit/blob/master/lib/stack.lua#L114)
 
 ```lua
-function errorHandler(req, res, err)
+function stack.errorHandler(req, res, err)
 ```
 
 ### [mount](../../../luvit/luvit/blob/master/lib/stack.lua#L76)
 
 ```lua
-function mount(mountpoint, ...)
+function stack.mount(mountpoint, ...)
 ```
 
 Mounts a substack app at a url subtree
@@ -782,13 +1128,13 @@ Mounts a substack app at a url subtree
 ### [stack](../../../luvit/luvit/blob/master/lib/stack.lua#L22)
 
 ```lua
-function stack(...)
+function stack.stack(...)
 ```
 
 ### [translate](../../../luvit/luvit/blob/master/lib/stack.lua#L88)
 
 ```lua
-function translate(mountpoint, matchpoint, ...)
+function stack.translate(mountpoint, matchpoint, ...)
 ```
 
 ## Module tcp
@@ -797,31 +1143,67 @@ function translate(mountpoint, matchpoint, ...)
 
 ### [Tcp](../../../luvit/luvit/blob/master/lib/tcp.lua#L25)
 
+### Functions
+
+### [bind](../../../luvit/luvit/blob/master/lib/tcp.lua#L43)
+
+```lua
+function Tcp:bind(host, port)
+```
+
+### [bind6](../../../luvit/luvit/blob/master/lib/tcp.lua#L48)
+
+```lua
+function Tcp:bind6(host, port)
+```
+
+### [connect](../../../luvit/luvit/blob/master/lib/tcp.lua#L63)
+
+```lua
+function Tcp:connect(ip_address, port)
+```
+
+### [connect6](../../../luvit/luvit/blob/master/lib/tcp.lua#L68)
+
+```lua
+function Tcp:connect6(ip_address, port)
+```
+
+### [getpeername](../../../luvit/luvit/blob/master/lib/tcp.lua#L58)
+
+```lua
+function Tcp:getpeername()
+```
+
+### [getsockname](../../../luvit/luvit/blob/master/lib/tcp.lua#L53)
+
+```lua
+function Tcp:getsockname()
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/tcp.lua#L27)
+
+```lua
+function Tcp:initialize()
+```
+
+### [keepalive](../../../luvit/luvit/blob/master/lib/tcp.lua#L37)
+
+```lua
+function Tcp:keepalive(enable, delay)
+```
+
+### [nodelay](../../../luvit/luvit/blob/master/lib/tcp.lua#L32)
+
+```lua
+function Tcp:nodelay(enable)
+```
+
 ### Classes
 
 ### Class [Tcp](../../../luvit/luvit/blob/master/lib/tcp.lua#L24)
 
 Extends Stream
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/tcp.lua#L27)
-
-#### [nodelay](../../../luvit/luvit/blob/master/lib/tcp.lua#L32)
-
-#### [keepalive](../../../luvit/luvit/blob/master/lib/tcp.lua#L37)
-
-#### [bind](../../../luvit/luvit/blob/master/lib/tcp.lua#L43)
-
-#### [bind6](../../../luvit/luvit/blob/master/lib/tcp.lua#L48)
-
-#### [getsockname](../../../luvit/luvit/blob/master/lib/tcp.lua#L53)
-
-#### [getpeername](../../../luvit/luvit/blob/master/lib/tcp.lua#L58)
-
-#### [connect](../../../luvit/luvit/blob/master/lib/tcp.lua#L63)
-
-#### [connect6](../../../luvit/luvit/blob/master/lib/tcp.lua#L68)
 
 ## Module timer
 
@@ -831,22 +1213,58 @@ Extends Stream
 
 ### Functions
 
+### [again](../../../luvit/luvit/blob/master/lib/timer.lua#L38)
+
+```lua
+function Timer:again()
+```
+
+### [getRepeat](../../../luvit/luvit/blob/master/lib/timer.lua#L46)
+
+```lua
+function Timer:getRepeat()
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/timer.lua#L26)
+
+```lua
+function Timer:initialize()
+```
+
+### [setRepeat](../../../luvit/luvit/blob/master/lib/timer.lua#L42)
+
+```lua
+function Timer:setRepeat(interval)
+```
+
+### [start](../../../luvit/luvit/blob/master/lib/timer.lua#L30)
+
+```lua
+function Timer:start(timeout, interval, callback)
+```
+
+### [stop](../../../luvit/luvit/blob/master/lib/timer.lua#L34)
+
+```lua
+function Timer:stop()
+```
+
 ### [clearTimer](../../../luvit/luvit/blob/master/lib/timer.lua#L69)
 
 ```lua
-function clearTimer(timer)
+function timer.clearTimer(timer)
 ```
 
 ### [setInterval](../../../luvit/luvit/blob/master/lib/timer.lua#L60)
 
 ```lua
-function setInterval(period, callback, ...)
+function timer.setInterval(period, callback, ...)
 ```
 
 ### [setTimeout](../../../luvit/luvit/blob/master/lib/timer.lua#L50)
 
 ```lua
-function setTimeout(duration, callback, ...)
+function timer.setTimeout(duration, callback, ...)
 ```
 
 ### Classes
@@ -854,20 +1272,6 @@ function setTimeout(duration, callback, ...)
 ### Class [Timer](../../../luvit/luvit/blob/master/lib/timer.lua#L22)
 
 Extends Handle
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/timer.lua#L26)
-
-#### [start](../../../luvit/luvit/blob/master/lib/timer.lua#L30)
-
-#### [stop](../../../luvit/luvit/blob/master/lib/timer.lua#L34)
-
-#### [again](../../../luvit/luvit/blob/master/lib/timer.lua#L38)
-
-#### [setRepeat](../../../luvit/luvit/blob/master/lib/timer.lua#L42)
-
-#### [getRepeat](../../../luvit/luvit/blob/master/lib/timer.lua#L46)
 
 ## Module tty
 
@@ -877,10 +1281,28 @@ Extends Handle
 
 ### Functions
 
+### [getWinsize](../../../luvit/luvit/blob/master/lib/tty.lua#L36)
+
+```lua
+function Tty:getWinsize()
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/tty.lua#L26)
+
+```lua
+function Tty:initialize(fd, readable)
+```
+
+### [setMode](../../../luvit/luvit/blob/master/lib/tty.lua#L31)
+
+```lua
+function Tty:setMode(mode)
+```
+
 ### [resetMode](../../../luvit/luvit/blob/master/lib/tty.lua#L41)
 
 ```lua
-function resetMode()
+function tty.resetMode()
 ```
 
 ### Classes
@@ -889,45 +1311,73 @@ function resetMode()
 
 Extends Stream
 
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/tty.lua#L26)
-
-#### [setMode](../../../luvit/luvit/blob/master/lib/tty.lua#L31)
-
-#### [getWinsize](../../../luvit/luvit/blob/master/lib/tty.lua#L36)
-
 ## Module udp
 
 ### Properties
 
 ### [Udp](../../../luvit/luvit/blob/master/lib/udp.lua#L25)
 
+### Functions
+
+### [bind](../../../luvit/luvit/blob/master/lib/udp.lua#L31)
+
+```lua
+function Udp:bind(host, port)
+```
+
+### [bind6](../../../luvit/luvit/blob/master/lib/udp.lua#L35)
+
+```lua
+function Udp:bind6(host, port)
+```
+
+### [getsockname](../../../luvit/luvit/blob/master/lib/udp.lua#L43)
+
+```lua
+function Udp:getsockname()
+```
+
+### [initialize](../../../luvit/luvit/blob/master/lib/udp.lua#L27)
+
+```lua
+function Udp:initialize()
+```
+
+### [recvStart](../../../luvit/luvit/blob/master/lib/udp.lua#L55)
+
+```lua
+function Udp:recvStart()
+```
+
+### [recvStop](../../../luvit/luvit/blob/master/lib/udp.lua#L59)
+
+```lua
+function Udp:recvStop()
+```
+
+### [send](../../../luvit/luvit/blob/master/lib/udp.lua#L47)
+
+```lua
+function Udp:send(...)
+```
+
+### [send6](../../../luvit/luvit/blob/master/lib/udp.lua#L51)
+
+```lua
+function Udp:send6(...)
+```
+
+### [setMembership](../../../luvit/luvit/blob/master/lib/udp.lua#L39)
+
+```lua
+function Udp:setMembership(multicast_addr, interface_addr, option)
+```
+
 ### Classes
 
 ### Class [Udp](../../../luvit/luvit/blob/master/lib/udp.lua#L24)
 
 Extends Handle
-
-#### Methods
-
-#### [initialize](../../../luvit/luvit/blob/master/lib/udp.lua#L27)
-
-#### [bind](../../../luvit/luvit/blob/master/lib/udp.lua#L31)
-
-#### [bind6](../../../luvit/luvit/blob/master/lib/udp.lua#L35)
-
-#### [setMembership](../../../luvit/luvit/blob/master/lib/udp.lua#L39)
-
-#### [getsockname](../../../luvit/luvit/blob/master/lib/udp.lua#L43)
-
-#### [send](../../../luvit/luvit/blob/master/lib/udp.lua#L47)
-
-#### [send6](../../../luvit/luvit/blob/master/lib/udp.lua#L51)
-
-#### [recvStart](../../../luvit/luvit/blob/master/lib/udp.lua#L55)
-
-#### [recvStop](../../../luvit/luvit/blob/master/lib/udp.lua#L59)
 
 ## Module url
 
@@ -936,7 +1386,7 @@ Extends Handle
 ### [parse](../../../luvit/luvit/blob/master/lib/url.lua#L21)
 
 ```lua
-function parse(url)
+function url.parse(url)
 ```
 
 ## Module utils
@@ -946,46 +1396,25 @@ function parse(url)
 ### [bind](../../../luvit/luvit/blob/master/lib/utils.lua#L135)
 
 ```lua
-function bind(fun, self, ...)
+function utils.bind(fun, self, ...)
 ```
 
 ### [color](../../../luvit/luvit/blob/master/lib/utils.lua#L42)
 
 ```lua
-function color(color_name)
+function utils.color(color_name)
 ```
 
 ### [colorize](../../../luvit/luvit/blob/master/lib/utils.lua#L46)
 
 ```lua
-function colorize(color_name, string, reset_name)
+function utils.colorize(color_name, string, reset_name)
 ```
 
 ### [dump](../../../luvit/luvit/blob/master/lib/utils.lua#L60)
 
 ```lua
-function dump(o, depth)
+function utils.dump(o, depth)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
