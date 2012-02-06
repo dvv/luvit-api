@@ -1,11 +1,12 @@
 #!/usr/bin/env luvit
 
-local API = {}
-
 local Table = require('table')
 local Path = require('path')
 local JSON = require('json')
 local Fs = require('fs')
+
+local Object = require('core').Object
+local API = Object:extend()
 
 --
 -- a simple command line arguments parser
@@ -43,18 +44,16 @@ local function parseArguments(argv)
 end
 
 --
--- parse command line
+-- parser constructor
 --
-local flags, arguments = parseArguments()
+function API:initialize(...)
+  self.items = {}
+end
 
 --
--- parse file on given path, return table whose keys are line numbers and values are parsed tokens
+-- parse one file
 --
-function API.parseFile(path, callback)
-
-  local items = {}
-  local classes = {}
-  local tree = {}
+function API:parseFile(path, callback)
 
   Fs.readFile(path, function (err, text)
     if not text then callback(err) ; return end
@@ -81,150 +80,221 @@ function API.parseFile(path, callback)
       end)
     end
 
-    -- prune empty lines
-    --[[numbered = numbered:gsub('\n' .. number_tag .. '\n', function ()
-      return '\n'
-    end)]]--
+    -- table of seen items
+    local items = {}
+
+    -- define module
+    local module = {
+      requires = {},
+      items = items,
+    }
+
+    -- guess exports table
+    for name, line in numbered:gmatch('\nreturn ' .. name_re .. '[^\n]*' .. number_tag) do
+      module.name = name
+      local item = {
+        line = line,
+        type = 'module',
+        name = name,
+      }
+      items[name] = item
+    end
+
+    -- collect requires
+    for name, value, line in numbered:gmatch('\nlocal ' .. name_re .. ' = require(%b())[^\n]*' .. number_tag) do
+      module.requires[name] = value:sub(3, -3)
+    end
+
+    -- helper to compose the full name of an item
+    local function full_name(name)
+      if not module.name or name:find('^' .. module.name .. '%.') then
+        return name
+      else
+        return module.name .. '.' .. name
+      end
+    end
 
     -- collect classes
-    for name, parent, line in numbered:gmatch('\nlocal ' .. name_re .. ' = ' .. name_re .. ':extend%b()%s*' .. number_tag) do
+    for name, extends, line in numbered:gmatch('\nlocal ' .. name_re .. ' = ' .. name_re .. ':extend%b()[^\n]*' .. number_tag) do
       local item = {
         line = line,
         type = 'class',
-        name = name,
-        parent = parent,
-        properties = {},
-        methods = {},
+        name = full_name(name),
+        meta = {},
+        extends = extends:find('.', 1, true) and extends or full_name(extends),
       }
-      items[line] = item
-      --[[classes[name] = item
-      if not tree[parent] then
-        tree[parent] = {}
-      end
-      tree[parent].classes[name] = item]]--
+      items[item.name] = item
     end
 
     -- collect exported module-level functions
     -- `function MODULE.func(args)` form
-    for name, args, line in numbered:gmatch('\nfunction ' .. name_re .. '(%b())%s*' .. number_tag) do
+    for name, args, line in numbered:gmatch('\nfunction ' .. name_re .. '(%b())[^\n]*' .. number_tag) do
       local item = {
         line = line,
         type = 'function',
-        name = name,
+        name = full_name(name),
         args = args:sub(2, -2),
       }
-      items[line] = item
-    end
-
-    -- collect exported module-level functions
-    -- `MODULE.func = function (args)` form
-    -- FIXME: valid notation?
-    for name, args, line in numbered:gmatch('\n' .. name_re .. ' = function (%b())%s*' .. number_tag) do
-      local item = {
-        line = line,
-        type = 'function',
-        name = name,
-        args = args:sub(2, -2),
-      }
-      items[line] = item
+      items[item.name] = item
     end
 
     -- collect exposed properties
-    for name, value, line in numbered:gmatch('\n' .. name_re .. ' = (.-)%s*' .. number_tag) do
-      if value:find('function', 1, true) ~= 1 then
-        local item= {
-          line = line,
-          type = 'property',
-          name = name,
-        }
+    for name, value, line in numbered:gmatch('\n' .. name_re .. ' = (.-)[^\n]*' .. number_tag) do
+      local item = {
+        line = line,
+        type = 'property',
+        name = full_name(name),
+      }
+      if value:find('function', 1, true) ~= 1 and not items[item.name] then
+        items[item.name] = item
+      end
+    end
+
+    -- collect block comments
+    for text, line in numbered:gmatch('\n%-%-%[(%b[])%]' .. number_tag) do
+      local item = {
+        line = line,
+        type = 'comment',
+        text = text:gsub(number_tag, ''):sub(2, -2):gsub('^\n+', ''):gsub('\n+$', ''),
+      }
+      -- N.B. the first block comment is module description
+      if not module.doc then
+        module.doc = item.text
+      else
+        -- N.B. line number starts with digit, hence no clashes to other items
         items[line] = item
       end
     end
 
-    -- collect requires
-    local requires = {}
-    for name, value, line in numbered:gmatch('\nlocal ' .. name_re .. ' = require(%b())%s*' .. number_tag) do
-      items[line] = {
-        line = line,
-        type = 'require',
-        name = name,
-        value = value:sub(3, -3),
-      }
-      requires[name] = items[line].value
-    end
-
-    -- collect block comments
-    for comment, line in numbered:gmatch('\n%-%-%[(%b[])%]' .. number_tag) do
-      items[line] = {
-        line = line,
-        type = 'comment',
-        block = true,
-        text = comment:gsub(number_tag, ''):sub(2, -2):gsub('^\n+', ''):gsub('\n+$', ''),
-      }
-    end
-
     -- collect single line comments
-    for comment, line in numbered:gmatch('\n%-%-%s+(.-)%s*' .. number_tag) do
+    for text, line in numbered:gmatch('\n%-%-%s+(.-)%s*' .. number_tag) do
       -- N.B: we glue adjacent comments
       local prev = tostring(line - 1)
       -- if previous line also contained comment
       if items[prev] and items[prev].type == 'comment' then
         -- glue previous line and this comment
-        comment = items[prev].text .. '\n' .. comment
+        text = items[prev].text .. '\n' .. text
         -- and forget about previous line
         items[prev] = nil
       end
-      items[line] = {
+      local item = {
         line = line,
         type = 'comment',
-        text = comment,
+        text = text,
       }
+      -- N.B. line number starts with digit, hence no clashes to other items
+      items[line] = item
     end
 
-    -- duplicate records sorted by line number
-    -- N.B. after that items[1] returns the first item in chronological order,
-    --   and items['1'] -- the item at source line 1, if any
+    -- bind comments to lower adjacent items.
     do
+      local href = (self.flags.href_prefix or '') .. Path.basename(path)
       local t = {}
       for k, v in pairs(items) do
+        -- reference source code
+        v.href = href .. '#L' .. v.line
+        -- numeric lines, for sorting
         v.line = tonumber(v.line)
+        -- short name
+        if v.name then
+          ---v.short_name = v.name:gsub('^.+[.:]', '')
+        end
+        -- children
+        v.children = {}
+        --
         t[#t + 1] = v
       end
+      -- sort items by line number
       Table.sort(t, function (a, b) return a.line < b.line end)
+      -- bind comments to lower adjacent items
       for i, r in ipairs(t) do
-        items[#items + 1] = r
+        local r1 = t[i + 1]
+        if r.type == 'comment' then
+          if r1 and r1.type ~= 'comment' then
+            r1.doc = r.text
+          end
+          -- remove comment items
+          items[tostring(r.line)] = nil
+        end
+        -- housekeep
+        r.line = nil
       end
     end
 
-    -- report collected items
-    callback(nil, items, text)
+    -- report parsed module
+    callback(nil, module)
 
   end)
 
 end
 
 --
--- for each path in `paths` recursively parse all files matching `pattern`
+-- parse many files into self.items
 --
-function API.parsePath(paths, callback)
+function API:parse(paths, callback)
 
-  local files = {}
+  local function sort()
+    -- convert hash to array, to ease sorting
+    local items = self.items
+    local tree = {}
+    for k, v in pairs(items) do tree[#tree + 1] = v end
+    -- sort items by name, case doesn't matter
+    Table.sort(tree, function (a, b) return a.name:lower() < b.name:lower() end)
+    local q = {}
+    for i, r in ipairs(tree) do q[#q + 1] = r.name .. ':' .. r.type .. ':' .. (r.doc or '') end
+    Fs.writeFile('api.list', JSON.stringify(q, { beautify = true, indent_string = '  ' }), print)
+    -- starting from the most lengthy name...
+    for i = #tree, 2, -1 do
+      local r = tree[i]
+      -- compose guessed parent name, by removing the latest name chunk
+      local pname = r.name:gsub('[.:][^.:]-$', '')
+      -- parent name is not the same as this item name?
+      if pname ~= r.name then
+        -- parent is explicitly seen
+        if items[pname] then
+          -- move this item to parent's children
+          Table.insert(items[pname].children, r)
+          Table.remove(tree, i)
+        -- parent is a class' meta
+        elseif pname:sub(-5, -1) == '.meta' then
+          -- move this item to that class' meta
+          pname = pname:sub(1, -6)
+          if items[pname] and items[pname].type == 'class' then
+            Table.insert(items[pname].meta, r)
+            Table.remove(tree, i)
+          -- no class found?!
+          else
+            -- hard error
+            printStderr('Meta defined on non-class for "' .. pname .. '"\n')
+          end
+        -- no parent class or namespace found?!
+        else
+          -- hard error
+          printStderr('No parent found for "' .. r.name .. '"\n')
+        end
+      end
+    end
+    --
+    self.tree = tree
+    callback()
+  end
+
   local processed = 0
 
   -- for each path
   for _, path in pairs(paths) do
 
     -- walk over files under that path
-    base_path = Path.resolve(process.cwd(), path)
-    API.parseFile(path, function (err, file, text)
-      -- store parsed tokens
-      --p(path, path:sub(#base_path + 2), file)
-      files[path] = file
+    self:parseFile(path, function (err, module)
+      -- collect parsed items
+      for k, v in pairs(module.items) do
+        self.items[k] = v
+      end
       -- upon walk is complete
       processed = processed + 1
       if processed == #paths then
-        -- report all parsed tokens
-        callback(nil, files)
+        -- report all parsed items at once
+        sort()
       end
     end)
 
@@ -232,43 +302,99 @@ function API.parsePath(paths, callback)
 
   -- handle empty paths case
   if processed == #paths then
-    callback(nil, files)
+    sort()
   end
 
 end
 
-local api = {}
+function API:toJSON()
+  print(JSON.stringify(self.tree, { beautify = true, indent_string = '  ' }))
+end
+
+function API:toMarkdown()
+
+  local o = {}
+  local function put(s, dont_separate)
+    if not dont_separate then
+      Table.insert(o, '')
+    end
+    Table.insert(o, s or '')
+  end
+
+  local function filter(list, fn)
+    local r = {}
+    for k, v in ipairs(list) do
+      if fn(v, k, list) then
+        r[#r + 1] = v
+      end
+    end
+    return r
+  end
+
+  local function map(list, fn)
+    local r = {}
+    for k, v in ipairs(list) do
+      r[k] = fn(v, k, list)
+    end
+    return r
+  end
+
+  local function output_tree(tree, depth)
+    for _, item in ipairs(tree) do
+      put(('#'):rep(depth + 2) .. ' ' .. item.type .. ' ' .. item.name)
+      if item.type == 'class' then
+        put('Extends `' .. item.extends .. '`')
+      end
+      if item.type == 'function' then
+        put('```lua\n' .. 'function ' .. item.name .. '(' .. item.args .. ')' .. '\n```')
+      end
+      if item.doc then put(item.doc) end
+      local props = filter(item.children, function (x) return x.type == 'property' end)
+      if #props > 0 then
+        --put(('#'):rep(depth + 3) .. ' Properties')
+        output_tree(props, depth + 1)
+        --[[for _, v in ipairs(props) do
+          put(('#'):rep(depth + 3) .. '[' .. v.name .. '](' .. v.href .. ')')
+          if v.doc then put(v.doc) end
+        end]]--
+      end
+      local funcs = filter(item.children, function (x) return x.type == 'function' end)
+      if #funcs > 0 then
+        --put(('#'):rep(depth + 3) .. 'Functions')
+        output_tree(funcs, depth + 1)
+        --[[for _, v in ipairs(funcs) do
+          put(('#'):rep(depth + 3) .. '[' .. v.name .. '](' .. v.href .. ')')
+          put('```lua\n' .. 'function ' .. v.name .. '(' .. v.args .. ')' .. '\n```')
+          if v.doc then put(v.doc) end
+        end]]--
+      end
+      local classes = filter(item.children, function (x) return x.type == 'class' end)
+      if #classes > 0 then
+        output_tree(classes, depth + 1)
+      end
+    end
+  end
+
+  output_tree(self.tree, 0)
+  print(Table.concat(o, '\n') .. '\n')
+
+end
+
 --
--- process arguments
+-- parse process arguments
 --
-API.parsePath(arguments, function (err, files)
-  require('fs').writeFile('api.json', JSON.stringify(files, { beautify = true, indent_string = '  ' }), print)
-  for filename, items in pairs(files) do
+local parser = API:new()
+parser.flags, arguments = parseArguments(process.argv)
+parser:parse(arguments, function ()
+  if parser.flags.json then
+    parser:toJSON()
+  else
+    parser:toMarkdown()
+  end
+end)
 
-    local href = '../../../luvit/luvit/blob/master/lib/' .. Path.basename(filename)
-
-    -- distribute items
-    local mod = {
-      module = Path.basename(filename):gsub('%..-$', ''),
-      href = href,
-      --doc = nil,
-      functions = {},
-      properties = {},
-      classes = {},
-    }
-
+--[[
     for i, r in ipairs(items) do
-      -- short name
-      if r.name then
-        r.short_name = r.name:gsub('^.+[.:]', '')
-      end
-      -- line to reference
-      r.href = href .. '#L' .. r.line
-      -- bind comments to lower adjacent items
-      local r1 = items[i - 1]
-      if r.type ~= 'comment' and r1 and r1.type == 'comment' then
-        r.doc = r1.text
-      end
       -- the first block comment is module description
       if r.type == 'comment' and r.block and not mod.doc then
         mod.doc = r.text
@@ -297,61 +423,7 @@ API.parsePath(arguments, function (err, files)
 
   --print(JSON.stringify(api['core'], { beautify = true, indent_string = '  ' }))
 
-  -- markdown
-  local o = {}
-  local function put(s, dont_separate)
-    if not dont_separate then
-      Table.insert(o, '')
-    end
-    Table.insert(o, s or '')
-  end
-  for _, mod in ipairs(api) do
-    put('## Module ' .. mod.module)
-    if mod.doc then
-      put(mod.doc)
-    end
-    if #mod.properties > 0 then
-      put('### Properties')
-      for _, v in ipairs(mod.properties) do
-        put('### [' .. v.short_name .. '](' .. v.href .. ')')
-        if v.doc then put(v.doc) end
-      end
-    end
-    if #mod.functions > 0 then
-      put('### Functions')
-      for _, v in ipairs(mod.functions) do
-        put('### [' .. v.short_name .. '](' .. v.href .. ')')
-        if v.signature then put('```lua\n' .. v.signature .. '\n```') end
-        if v.doc then put(v.doc) end
-      end
-    end
-    if #mod.classes > 0 then
-      put('### Classes')
-      for _, v in ipairs(mod.classes) do
-        put('### Class [' .. v.short_name .. '](' .. v.href .. ')')
-        if v.parent then put('Extends ' .. v.parent) end
-        if v.doc then put(v.doc) end
-        if #v.properties > 0 then
-          put('#### Properties')
-          for _, v in ipairs(v.properties) do
-            put('#### [' .. v.short_name .. '](' .. v.href .. ')')
-            if v.doc then put(v.doc) end
-          end
-        end
-        if #v.methods > 0 then
-          put('#### Methods')
-          for _, v in ipairs(v.methods) do
-            put('#### [' .. v.short_name .. '](' .. v.href .. ')')
-            if v.signature then put('```lua\n' .. v.signature .. '\n```') end
-            if v.doc then put(v.doc) end
-          end
-        end
-      end
-    end
-  end
-  print(Table.concat(o, '\n') .. '\n')
-
-end)
+  ]]--
 
 
 -- module
