@@ -1,3 +1,3 @@
 #!/bin/sh
-../api.lua --json good.lua better.lua >api.json
-../api.lua good.lua better.lua >api.markdown
+#../api.lua --format=json good.lua better.lua >api.json
+../api.lua --format=html good.lua better.lua >api.html

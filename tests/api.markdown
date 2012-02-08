@@ -1,138 +1,112 @@
 
-## property _G.argv
+## property argv
 
-## property _G.bit
+## property bit
 
-## property _G.coroutine
+## property coroutine
 
-## property _G.debug
+## property debug
 
-## property _G.dofile
+## property dofile
 
-## property _G.getcwd
+## property getcwd
 
-## property _G.HTTP_VERSION
+## property HTTP_VERSION
 
-## property _G.io
+## property io
 
 clear some globals
 This will break lua code written for other lua runtimes
 
-## property _G.jit
+## property jit
 
-## property _G.loadfile
+## property loadfile
 
-## property _G.LUAJIT_VERSION
+## property LUAJIT_VERSION
 
-## property _G.math
+## property math
 
-## property _G.module
+## property module
 
-## property _G.os
+## property os
 
-## property _G.print
+## property print
 
-## property _G.string
+## property string
 
-## property _G.table
+## property table
 
-## property _G.UV_VERSION
+## property UV_VERSION
 
-## property _G.VERSION
+## property VERSION
 
-## property _G.YAJL_VERSION
+## property YAJL_VERSION
 
 ## module buffer
 
-### class buffer.Buffer
+### class Buffer
 
-Extends `buffer.Object`
-
-#### function buffer.Buffer:readUInt8
+Extends [`Object`](../../../luvit/luvit/blob/master/lib/buffer.lua#L30)
 
 ```lua
-function buffer.Buffer:readUInt8(offset)
+function Buffer:readUInt8(offset)
 ```
 
-#### function buffer.Buffer:readUInt32LE
-
 ```lua
-function buffer.Buffer:readUInt32LE(offset)
+function Buffer:readUInt32LE(offset)
 ```
 
-#### function buffer.Buffer:readUInt32BE
-
 ```lua
-function buffer.Buffer:readUInt32BE(offset)
+function Buffer:readUInt32BE(offset)
 ```
 
-#### function buffer.Buffer:readUInt16LE
-
 ```lua
-function buffer.Buffer:readUInt16LE(offset)
+function Buffer:readUInt16LE(offset)
 ```
 
-#### function buffer.Buffer:readUInt16BE
-
 ```lua
-function buffer.Buffer:readUInt16BE(offset)
+function Buffer:readUInt16BE(offset)
 ```
 
-#### function buffer.Buffer:readInt8
-
 ```lua
-function buffer.Buffer:readInt8(offset)
+function Buffer:readInt8(offset)
 ```
 
-#### function buffer.Buffer:readInt32LE
-
 ```lua
-function buffer.Buffer:readInt32LE(offset)
+function Buffer:readInt32LE(offset)
 ```
 
-#### function buffer.Buffer:readInt32BE
-
 ```lua
-function buffer.Buffer:readInt32BE(offset)
+function Buffer:readInt32BE(offset)
 ```
 
-#### function buffer.Buffer:readInt16LE
-
 ```lua
-function buffer.Buffer:readInt16LE(offset)
+function Buffer:readInt16LE(offset)
 ```
 
-#### function buffer.Buffer:readInt16BE
-
 ```lua
-function buffer.Buffer:readInt16BE(offset)
+function Buffer:readInt16BE(offset)
 ```
 
-#### function buffer.Buffer:inspect
-
 ```lua
-function buffer.Buffer:inspect()
+function Buffer:inspect()
 ```
 
-#### function buffer.Buffer:initialize
-
 ```lua
-function buffer.Buffer:initialize(length)
+function Buffer:initialize(length)
 ```
 
 ## module core
 
-### property core.Object
+### property Object
 
 This is the most basic object in Luvit. It provides simple prototypal
 inheritance and inheritable constructors. All other objects inherit from this.
 
-#### property core.Object.meta
-
-#### function core.Object:new
+#### property meta
 
 ```lua
-function core.Object:new(...)
+function Object:new(...)
 ```
 
 Creates a new instance and calls `obj:initialize(...)` if it exists.
@@ -148,10 +122,8 @@ Creates a new instance and calls `obj:initialize(...)` if it exists.
     local rect = Rectangle:new(3, 4)
     p(rect:getArea())
 
-#### function core.Object:extend
-
 ```lua
-function core.Object:extend()
+function Object:extend()
 ```
 
 Creates a new sub-class.
@@ -162,118 +134,94 @@ Creates a new sub-class.
       self.h = h
     end
 
-#### function core.Object:create
-
 ```lua
-function core.Object:create()
+function Object:create()
 ```
 
 Create a new instance of this object
 
-### class core.Stream
+### class Stream
 
-Extends `core.Handle`
+Extends [`Handle`](../../../luvit/luvit/blob/master/lib/core.lua#L234)
 
 This is never used directly.  If you want to create a pure Lua stream, subclass
 or instantiate `core.iStream`.
 
-#### function core.Stream:write
-
 ```lua
-function core.Stream:write(chunk, callback)
+function Stream:write(chunk, callback)
 ```
 
-#### function core.Stream:shutdown
-
 ```lua
-function core.Stream:shutdown()
+function Stream:shutdown()
 ```
 
-#### function core.Stream:readStop
-
 ```lua
-function core.Stream:readStop()
+function Stream:readStop()
 ```
 
-#### function core.Stream:readStart
-
 ```lua
-function core.Stream:readStart()
+function Stream:readStart()
 ```
 
-#### function core.Stream:pipe
-
 ```lua
-function core.Stream:pipe(target)
+function Stream:pipe(target)
 ```
 
-#### function core.Stream:listen
-
 ```lua
-function core.Stream:listen(callback)
+function Stream:listen(callback)
 ```
 
-#### function core.Stream:accept
-
 ```lua
-function core.Stream:accept(other_stream)
+function Stream:accept(other_stream)
 ```
 
-### class core.iStream
+### class iStream
 
-Extends `core.Emitter`
+Extends [`Emitter`](../../../luvit/luvit/blob/master/lib/core.lua#L277)
 
 This is an abstract interface that works like `core.Stream` but doesn't actually
 contain a uv struct (it's pure lua)
 
-### class core.Handle
+### class Handle
 
-Extends `core.Emitter`
+Extends [`Emitter`](../../../luvit/luvit/blob/master/lib/core.lua#L199)
 
 This class is never used directly, but is the inheritance chain of all libuv
 objects.
 
-#### function core.Handle:setHandler
-
 ```lua
-function core.Handle:setHandler(name, callback)
+function Handle:setHandler(name, callback)
 ```
 
 Set or replace the handler for a native event.  Usually `Emitter:on()` is what
 you want, not this.
 
-#### function core.Handle:close
-
 ```lua
-function core.Handle:close()
+function Handle:close()
 ```
 
 Wrapper around `uv_close`. Closes the underlying file descriptor of a handle.
 
-#### function core.Handle:addHandlerType
-
 ```lua
-function core.Handle:addHandlerType(name)
+function Handle:addHandlerType(name)
 ```
 
 This is used by Emitters to register with native events when the first listener
 is added.
 
-### class core.Error
+### class Error
 
-Extends `core.Object`
+Extends [`Object`](../../../luvit/luvit/blob/master/lib/core.lua#L285)
 
 This is for code that wants structured error messages.
 
-#### function core.Error:initialize
-
 ```lua
-function core.Error:initialize(message)
+function Error:initialize(message)
 ```
 
-### class core.Emitter
+### class Emitter
 
-Extends `core.Object`
+Extends [`Object`](../../../luvit/luvit/blob/master/lib/core.lua#L97)
 
 This class can be used directly whenever an event emitter is needed.
 
@@ -287,10 +235,8 @@ Also it can easily be sub-classed.
     local c = Custom:new()
     c:on('bar', onBar)
 
-#### function core.Emitter:wrap
-
 ```lua
-function core.Emitter:wrap(name)
+function Emitter:wrap(name)
 ```
 
 Utility that binds the named method `self[name]` for use as a callback.  The
@@ -306,47 +252,35 @@ first argument (`err`) is re-routed to the "error" event instead.
       -- and so forth
     end
 
-#### function core.Emitter:removeListener
-
 ```lua
-function core.Emitter:removeListener(name, callback)
+function Emitter:removeListener(name, callback)
 ```
 
 Remove a listener so that it no longer catches events.
 
-#### function core.Emitter:once
-
 ```lua
-function core.Emitter:once(name, callback)
+function Emitter:once(name, callback)
 ```
 
 Same as `Emitter:on` except it de-registers itself after the first event.
 
-#### function core.Emitter:on
-
 ```lua
-function core.Emitter:on(name, callback)
+function Emitter:on(name, callback)
 ```
 
 Adds an event listener (`callback`) for the named event `name`.
 
-#### function core.Emitter:missingHandlerType
-
 ```lua
-function core.Emitter:missingHandlerType(name, ...)
+function Emitter:missingHandlerType(name, ...)
 ```
 
 By default, and error events that are not listened for should thow errors
 
-#### function core.Emitter:emit
-
 ```lua
-function core.Emitter:emit(name, ...)
+function Emitter:emit(name, ...)
 ```
 
 Emit a named event to all listeners with optional data argument(s).
-
-## function debug
 
 ```lua
 function debug(...)
@@ -356,87 +290,59 @@ Like p, but prints to stderr using blocking I/O for better debugging
 
 ## module dns
 
-### function dns.reverse
-
 ```lua
-function dns.reverse(ip, callback)
+function reverse(ip, callback)
 ```
 
-### function dns.resolveTxt
-
 ```lua
-function dns.resolveTxt(domain, callback)
+function resolveTxt(domain, callback)
 ```
 
-### function dns.resolveSrv
-
 ```lua
-function dns.resolveSrv(domain, callback)
+function resolveSrv(domain, callback)
 ```
 
-### function dns.resolveNs
-
 ```lua
-function dns.resolveNs(domain, callback)
+function resolveNs(domain, callback)
 ```
 
-### function dns.resolveMx
-
 ```lua
-function dns.resolveMx(domain, callback)
+function resolveMx(domain, callback)
 ```
 
-### function dns.resolveCname
-
 ```lua
-function dns.resolveCname(domain, callback)
+function resolveCname(domain, callback)
 ```
 
-### function dns.resolve6
-
 ```lua
-function dns.resolve6(domain, callback)
+function resolve6(domain, callback)
 ```
 
-### function dns.resolve4
-
 ```lua
-function dns.resolve4(domain, callback)
+function resolve4(domain, callback)
 ```
 
-### function dns.resolve
-
 ```lua
-function dns.resolve(domain, rrtype, callback)
+function resolve(domain, rrtype, callback)
 ```
 
-### function dns.lookup
-
 ```lua
-function dns.lookup(domain, family, callback)
+function lookup(domain, family, callback)
 ```
 
-### function dns.isIpV6
-
 ```lua
-function dns.isIpV6(ip)
+function isIpV6(ip)
 ```
 
-### function dns.isIpV4
-
 ```lua
-function dns.isIpV4(ip)
+function isIpV4(ip)
 ```
 
-### function dns.isIp
-
 ```lua
-function dns.isIp(ip)
+function isIp(ip)
 ```
 
 ## property error_meta
-
-## function eventSource
 
 ```lua
 function eventSource(name, fn, ...)
@@ -447,302 +353,228 @@ The user can override it to hook into event sources
 
 ## module fiber
 
-### function fiber.new
-
 ```lua
-function fiber.new(fn)
+function new(fn)
 ```
 
 ## module fs
 
-### function fs.writeFile
-
 ```lua
-function fs.writeFile(path, data, callback)
+function writeFile(path, data, callback)
 ```
 
-### function fs.readFileSync
-
 ```lua
-function fs.readFileSync(path)
+function readFileSync(path)
 ```
 
-### function fs.readFile
-
 ```lua
-function fs.readFile(path, callback)
+function readFile(path, callback)
 ```
 
-### function fs.existsSync
-
 ```lua
-function fs.existsSync(path)
+function existsSync(path)
 ```
 
-### function fs.exists
-
 ```lua
-function fs.exists(path, callback)
+function exists(path, callback)
 ```
 
 Wrap the core fs functions in forced sync and async versions
 
-### function fs.createWriteStream
-
 ```lua
-function fs.createWriteStream(path, options)
+function createWriteStream(path, options)
 ```
 
-### function fs.createReadStream
-
 ```lua
-function fs.createReadStream(path, options)
+function createReadStream(path, options)
 ```
 
 TODO: Implement backpressure here and in tcp streams
 
-### class fs.Watcher
+### class Watcher
 
-Extends `fs.Handle`
-
-#### function fs.Watcher:initialize
+Extends [`Handle`](../../../luvit/luvit/blob/master/lib/fs.lua#L235)
 
 ```lua
-function fs.Watcher:initialize(path)
+function Watcher:initialize(path)
 ```
 
 ## module http
 
-### property http.STATUS_CODES
-
-### function http.request
+### property STATUS_CODES
 
 ```lua
-function http.request(options, callback)
+function request(options, callback)
 ```
 
-### function http.createServer
-
 ```lua
-function http.createServer(host, port, onConnection)
+function createServer(host, port, onConnection)
 ```
 
-### class http.Response
+### class Response
 
-Extends `http.iStream`
+Extends [`iStream`](../../../luvit/luvit/blob/master/lib/http.lua#L99)
 
-#### property http.Response.auto_server
+#### property auto_server
 
-#### property http.Response.auto_date
+#### property auto_date
 
-#### property http.Response.auto_content_type
+#### property auto_content_type
 
-#### property http.Response.auto_content_length
+#### property auto_content_length
 
-#### property http.Response.auto_chunked_encoding
-
-#### function http.Response:writeHead
+#### property auto_chunked_encoding
 
 ```lua
-function http.Response:writeHead(code, headers, callback)
+function Response:writeHead(code, headers, callback)
 ```
 
-#### function http.Response:writeContinue
-
 ```lua
-function http.Response:writeContinue(callback)
+function Response:writeContinue(callback)
 ```
 
-#### function http.Response:write
-
 ```lua
-function http.Response:write(chunk, callback)
+function Response:write(chunk, callback)
 ```
 
-#### function http.Response:unsetHeader
-
 ```lua
-function http.Response:unsetHeader(name)
+function Response:unsetHeader(name)
 ```
 
 Removes a set header.  Cannot remove headers added with :addHeader
 
-#### function http.Response:setHeader
-
 ```lua
-function http.Response:setHeader(name, value)
+function Response:setHeader(name, value)
 ```
 
 This sets a header, replacing any header with the same name (case insensitive)
 
-#### function http.Response:setCode
-
 ```lua
-function http.Response:setCode(code)
+function Response:setCode(code)
 ```
 
-#### function http.Response:initialize
-
 ```lua
-function http.Response:initialize(socket)
+function Response:initialize(socket)
 ```
 
-#### function http.Response:flushHead
-
 ```lua
-function http.Response:flushHead(callback)
+function Response:flushHead(callback)
 ```
 
-#### function http.Response:finish
-
 ```lua
-function http.Response:finish(chunk, callback)
+function Response:finish(chunk, callback)
 ```
 
-#### function http.Response:close
-
 ```lua
-function http.Response:close(...)
+function Response:close(...)
 ```
 
-#### function http.Response:addHeader
-
 ```lua
-function http.Response:addHeader(name, value)
+function Response:addHeader(name, value)
 ```
 
 Adds a header line.  This does not replace any header by the same name and
 allows duplicate headers.  Returns the index it was inserted at
 
-### class http.Request
+### class Request
 
-Extends `http.iStream`
-
-#### function http.Request:initialize
+Extends [`iStream`](../../../luvit/luvit/blob/master/lib/http.lua#L86)
 
 ```lua
-function http.Request:initialize(socket)
+function Request:initialize(socket)
 ```
 
-#### function http.Request:close
-
 ```lua
-function http.Request:close(...)
+function Request:close(...)
 ```
 
 ## module JSON
 
-### function JSON.stringify
-
 ```lua
-function JSON.stringify(value, options)
+function stringify(value, options)
 ```
 
-### function JSON.streamingParser
-
 ```lua
-function JSON.streamingParser(callback, options)
+function streamingParser(callback, options)
 ```
 
-### function JSON.parse
-
 ```lua
-function JSON.parse(string, options)
+function parse(string, options)
 ```
 
 ## module mime
 
-### property mime.table
+### property table
 
-### property mime.default
-
-### function mime.getType
+### property default
 
 ```lua
-function mime.getType(path)
+function getType(path)
 ```
 
 ## module net
 
-### property net.createServer
-
-### property net.createConnection
-
-### property net.create
-
-### class net.Socket
-
-Extends `net.Emitter`
-
-#### function net.Socket:write
+### property create
 
 ```lua
-function net.Socket:write(data, callback)
+function createServer(connectionCallback)
 ```
-
-#### function net.Socket:setTimeout
 
 ```lua
-function net.Socket:setTimeout(msecs, callback)
+function createConnection(port, ... --[[ host, cb --]])
 ```
 
-#### function net.Socket:pipe
+### class Socket
+
+Extends [`Emitter`](../../../luvit/luvit/blob/master/lib/net.lua#L90)
 
 ```lua
-function net.Socket:pipe(destination)
+function Socket:write(data, callback)
 ```
-
-#### function net.Socket:initialize
 
 ```lua
-function net.Socket:initialize()
+function Socket:setTimeout(msecs, callback)
 ```
-
-#### function net.Socket:connect
 
 ```lua
-function net.Socket:connect(port, host, callback)
+function Socket:pipe(destination)
 ```
-
-#### function net.Socket:close
 
 ```lua
-function net.Socket:close()
+function Socket:initialize()
 ```
-
-#### function net.Socket:_connect
 
 ```lua
-function net.Socket:_connect(address, port, addressType)
+function Socket:connect(port, host, callback)
 ```
-
-### class net.Server
-
-Extends `net.Emitter`
-
-#### function net.Server:listen
 
 ```lua
-function net.Server:listen(port, ... --[[ ip, callback --]] )
+function Socket:close()
 ```
-
-#### function net.Server:initialize
 
 ```lua
-function net.Server:initialize(...)
+function Socket:_connect(address, port, addressType)
 ```
 
-#### function net.Server:close
+### class Server
+
+Extends [`Emitter`](../../../luvit/luvit/blob/master/lib/net.lua#L29)
 
 ```lua
-function net.Server:close()
+function Server:listen(port, ... --[[ ip, callback --]] )
 ```
 
-## property OS_BINDING.date
+```lua
+function Server:initialize(...)
+```
 
-## property OS_BINDING.time
+```lua
+function Server:close()
+```
 
-## function p
+## property date
+
+## property time
 
 ```lua
 function p(...)
@@ -750,99 +582,77 @@ function p(...)
 
 A nice global data dumper
 
-## property package.config
+## property config
 
-## property package.cpath
+## property cpath
 
-## property package.loaded.os
+## property os
 
 Copy date and binding over from lua os module into luvit os module
 
-## property package.loaded.os_binding
+## property os_binding
 
-## property package.loaders
+## property loaders
 
 Remove the cwd based loaders, we don't want them
 
-## property package.path
+## property path
 
-## property package.preload.os_binding
+## property os_binding
 
-## property package.searchpath
+## property searchpath
 
-## property package.seeall
+## property seeall
 
 ## module path
 
-### function path.resolve
-
 ```lua
-function path.resolve(root, filepath)
+function resolve(root, filepath)
 ```
 
-### function path.normalize
-
 ```lua
-function path.normalize(filepath)
+function normalize(filepath)
 ```
 
 Modifies an array of path parts in place by interpreting "." and ".." segments
 
-### function path.join
-
 ```lua
-function path.join(...)
+function join(...)
 ```
 
-### function path.extname
-
 ```lua
-function path.extname(filepath)
+function extname(filepath)
 ```
 
-### function path.dirname
-
 ```lua
-function path.dirname(filepath)
+function dirname(filepath)
 ```
 
-### function path.basename
-
 ```lua
-function path.basename(filepath, expected_ext)
+function basename(filepath, expected_ext)
 ```
 
 ## module pipe
 
-### class pipe.Pipe
+### class Pipe
 
-Extends `pipe.Stream`
-
-#### function pipe.Pipe:open
+Extends [`Stream`](../../../luvit/luvit/blob/master/lib/pipe.lua#L24)
 
 ```lua
-function pipe.Pipe:open(fd)
+function Pipe:open(fd)
 ```
-
-#### function pipe.Pipe:initialize
 
 ```lua
-function pipe.Pipe:initialize(ipc)
+function Pipe:initialize(ipc)
 ```
-
-#### function pipe.Pipe:connect
 
 ```lua
-function pipe.Pipe:connect(name)
+function Pipe:connect(name)
 ```
-
-#### function pipe.Pipe:bind
 
 ```lua
-function pipe.Pipe:bind(name)
+function Pipe:bind(name)
 ```
-
-## function print
 
 ```lua
 function print(...)
@@ -852,108 +662,91 @@ Replace print
 
 ## property process
 
-### property process.versions
+### property versions
 
-### property process.version
+### property version
 
-### property process.stdout
+### property stdout
 
-### property process.stdin
+### property stdin
 
 Load the tty as a pair of pipes
 But don't hold the event loop open for them
 
-### property process.env
+### property env
 
 Add global access to the environment variables using a dynamic table
 
-### property process.cwd
+### property cwd
 
-### property process.argv
-
-### function process:missingHandlerType
+### property argv
 
 ```lua
 function process:missingHandlerType(name, ...)
 ```
 
-### function process:addHandlerType
-
 ```lua
 function process:addHandlerType(name)
 ```
 
-### function process.spawn
-
 ```lua
-function process.spawn(...)
+function spawn(...)
 ```
 
-### function process.exit
-
 ```lua
-function process.exit(exit_code)
+function exit(exit_code)
 ```
 
-### class process.Process
+### class Process
 
-Extends `process.Handle`
-
-#### function process.Process:kill
+Extends [`Handle`](../../../luvit/luvit/blob/master/lib/childprocess.lua#L24)
 
 ```lua
-function process.Process:kill(signal)
+function Process:kill(signal)
 ```
 
-#### function process.Process:initialize
-
 ```lua
-function process.Process:initialize(command, args, options)
+function Process:initialize(command, args, options)
 ```
 
 ## module querystring
 
 module
 
-### function querystring.urlencode
-
 ```lua
-function querystring.urlencode(str)
+function urlencode(str)
 ```
 
-### function querystring.urldecode
+this comment
+is
+for purpose of documentation
 
 ```lua
-function querystring.urldecode(str)
+function urldecode(str)
 ```
 
-querystring helpers
-
-### function querystring.parse
+decode %XX sequences
+into corresponding
+characters.
+this comment
+is
+for purpose of documentation
 
 ```lua
-function querystring.parse(str, sep, eq)
+function parse(str, sep, eq)
 ```
-
-parse querystring into table. urldecode tokens
 
 ## module repl
 
-### property repl.colored_name
-
-### function repl.start
+### property colored_name
 
 ```lua
-function repl.start()
+function start()
 ```
-
-### function repl.evaluateLine
 
 ```lua
-function repl.evaluateLine(line)
+function evaluateLine(line)
 ```
-
-## function require
 
 ```lua
 function require(filepath, dirname)
@@ -961,282 +754,200 @@ function require(filepath, dirname)
 
 ## module stack
 
-### function stack.translate
-
 ```lua
-function stack.translate(mountpoint, matchpoint, ...)
+function translate(mountpoint, matchpoint, ...)
 ```
 
-### function stack.stack
-
 ```lua
-function stack.stack(...)
+function stack(...)
 ```
 
-### function stack.mount
-
 ```lua
-function stack.mount(mountpoint, ...)
+function mount(mountpoint, ...)
 ```
 
 Mounts a substack app at a url subtree
 
-### function stack.errorHandler
-
 ```lua
-function stack.errorHandler(req, res, err)
+function errorHandler(req, res, err)
 ```
 
-### function stack.compose
-
 ```lua
-function stack.compose(...)
+function compose(...)
 ```
 
 Build a composite stack made of several layers
 
 ## module tcp
 
-### class tcp.Tcp
+### class Tcp
 
-Extends `tcp.Stream`
-
-#### function tcp.Tcp:nodelay
+Extends [`Stream`](../../../luvit/luvit/blob/master/lib/tcp.lua#L24)
 
 ```lua
-function tcp.Tcp:nodelay(enable)
+function Tcp:nodelay(enable)
 ```
 
-#### function tcp.Tcp:keepalive
-
 ```lua
-function tcp.Tcp:keepalive(enable, delay)
+function Tcp:keepalive(enable, delay)
 ```
 
-#### function tcp.Tcp:initialize
-
 ```lua
-function tcp.Tcp:initialize()
+function Tcp:initialize()
 ```
 
-#### function tcp.Tcp:getsockname
-
 ```lua
-function tcp.Tcp:getsockname()
+function Tcp:getsockname()
 ```
 
-#### function tcp.Tcp:getpeername
-
 ```lua
-function tcp.Tcp:getpeername()
+function Tcp:getpeername()
 ```
 
-#### function tcp.Tcp:connect6
-
 ```lua
-function tcp.Tcp:connect6(ip_address, port)
+function Tcp:connect6(ip_address, port)
 ```
 
-#### function tcp.Tcp:connect
-
 ```lua
-function tcp.Tcp:connect(ip_address, port)
+function Tcp:connect(ip_address, port)
 ```
 
-#### function tcp.Tcp:bind6
-
 ```lua
-function tcp.Tcp:bind6(host, port)
+function Tcp:bind6(host, port)
 ```
 
-#### function tcp.Tcp:bind
-
 ```lua
-function tcp.Tcp:bind(host, port)
+function Tcp:bind(host, port)
 ```
 
 ## module timer
 
-### function timer.setTimeout
-
 ```lua
-function timer.setTimeout(duration, callback, ...)
+function setTimeout(duration, callback, ...)
 ```
 
-### function timer.setInterval
-
 ```lua
-function timer.setInterval(period, callback, ...)
+function setInterval(period, callback, ...)
 ```
 
-### function timer.clearTimer
-
 ```lua
-function timer.clearTimer(timer)
+function clearTimer(timer)
 ```
 
-### class timer.Timer
+### class Timer
 
-Extends `timer.Handle`
-
-#### function timer.Timer:stop
+Extends [`Handle`](../../../luvit/luvit/blob/master/lib/timer.lua#L22)
 
 ```lua
-function timer.Timer:stop()
+function Timer:stop()
 ```
 
-#### function timer.Timer:start
-
 ```lua
-function timer.Timer:start(timeout, interval, callback)
+function Timer:start(timeout, interval, callback)
 ```
 
-#### function timer.Timer:setRepeat
-
 ```lua
-function timer.Timer:setRepeat(interval)
+function Timer:setRepeat(interval)
 ```
 
-#### function timer.Timer:initialize
-
 ```lua
-function timer.Timer:initialize()
+function Timer:initialize()
 ```
 
-#### function timer.Timer:getRepeat
-
 ```lua
-function timer.Timer:getRepeat()
+function Timer:getRepeat()
 ```
 
-#### function timer.Timer:again
-
 ```lua
-function timer.Timer:again()
+function Timer:again()
 ```
 
 ## module tty
 
-### function tty.resetMode
-
 ```lua
-function tty.resetMode()
+function resetMode()
 ```
 
-### class tty.Tty
+### class Tty
 
-Extends `tty.Stream`
-
-#### function tty.Tty:setMode
+Extends [`Stream`](../../../luvit/luvit/blob/master/lib/tty.lua#L23)
 
 ```lua
-function tty.Tty:setMode(mode)
+function Tty:setMode(mode)
 ```
 
-#### function tty.Tty:initialize
-
 ```lua
-function tty.Tty:initialize(fd, readable)
+function Tty:initialize(fd, readable)
 ```
 
-#### function tty.Tty:getWinsize
-
 ```lua
-function tty.Tty:getWinsize()
+function Tty:getWinsize()
 ```
 
 ## module udp
 
-### class udp.Udp
+### class Udp
 
-Extends `udp.Handle`
-
-#### function udp.Udp:setMembership
+Extends [`Handle`](../../../luvit/luvit/blob/master/lib/udp.lua#L24)
 
 ```lua
-function udp.Udp:setMembership(multicast_addr, interface_addr, option)
+function Udp:setMembership(multicast_addr, interface_addr, option)
 ```
 
-#### function udp.Udp:send6
-
 ```lua
-function udp.Udp:send6(...)
+function Udp:send6(...)
 ```
 
-#### function udp.Udp:send
-
 ```lua
-function udp.Udp:send(...)
+function Udp:send(...)
 ```
 
-#### function udp.Udp:recvStop
-
 ```lua
-function udp.Udp:recvStop()
+function Udp:recvStop()
 ```
 
-#### function udp.Udp:recvStart
-
 ```lua
-function udp.Udp:recvStart()
+function Udp:recvStart()
 ```
 
-#### function udp.Udp:initialize
-
 ```lua
-function udp.Udp:initialize()
+function Udp:initialize()
 ```
 
-#### function udp.Udp:getsockname
-
 ```lua
-function udp.Udp:getsockname()
+function Udp:getsockname()
 ```
 
-#### function udp.Udp:bind6
-
 ```lua
-function udp.Udp:bind6(host, port)
+function Udp:bind6(host, port)
 ```
 
-#### function udp.Udp:bind
-
 ```lua
-function udp.Udp:bind(host, port)
+function Udp:bind(host, port)
 ```
 
 ## module url
 
-### function url.parse
-
 ```lua
-function url.parse(url)
+function parse(url)
 ```
 
 ## module utils
 
-### function utils.dump
-
 ```lua
-function utils.dump(o, depth)
+function dump(o, depth)
 ```
 
-### function utils.colorize
-
 ```lua
-function utils.colorize(color_name, string, reset_name)
+function colorize(color_name, string, reset_name)
 ```
 
-### function utils.color
-
 ```lua
-function utils.color(color_name)
+function color(color_name)
 ```
 
-### function utils.bind
-
 ```lua
-function utils.bind(fun, self, ...)
+function bind(fun, self, ...)
 ```
 
 

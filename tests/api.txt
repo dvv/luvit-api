@@ -1,0 +1,393 @@
+/home/dvv/LUVIT/luvit/lib/utils.lua
+Functions:
+{
+  { type = "function", line = 42, name = "utils.color", args = "color_name" },
+  { type = "function", line = 46, name = "utils.colorize", args = "color_name, string, reset_name" },
+  { type = "function", line = 61, name = "utils.dump", args = "o, depth" },
+  { type = "function", line = 136, name = "utils.bind", args = "fun, self, ..." }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{
+  {
+    type = "comment",
+    line = 169,
+    text = "["nil"] = nil,\n["8"] = 8,\n["number"] = 42,\n["boolean"] = true,\n["table"] = {age = 29, name="Tim"},\n["string"] = "Another String",\n["function"] = dump,\n["thread"] = coroutine.create(dump),\n[print] = {{"deep"},{{"nesting"}},3,4,5},\n[{1,2,3}] = {4,5,6}"
+  }
+}
+/home/dvv/LUVIT/luvit/lib/error.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 20, value = "Object", type = "variable", name = "Error", extends = "object" } }
+Comments:
+{ { type = "comment", line = 22, text = "Make errors tostringable" } }
+/home/dvv/LUVIT/luvit/lib/udp.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 22, value = "Handle", type = "variable", name = "UDP", extends = "handle" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/request.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 21, value = "Emitter", type = "variable", name = "Request", extends = "emitter" } }
+Comments:
+{ { type = "comment", line = 23, text = "Fall back inheritance to the socket's methods" } }
+/home/dvv/LUVIT/luvit/lib/tty.lua
+Functions:
+{ { type = "function", line = 33, name = "TTY:reset_mode", args = "" } }
+Properties:
+{  }
+Variables:
+{ { line = 21, value = "Stream", type = "variable", name = "TTY", extends = "stream" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/mime.lua
+Functions:
+{ { type = "function", line = 199, name = "MIME.get_type", args = "path" } }
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/process.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 22, value = "Handle", type = "variable", name = "Process", extends = "handle" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/http.lua
+Functions:
+{ { type = "function", line = 27, name = "HTTP.request", args = "options, callback" }, { type = "function", line = 102, name = "HTTP.create_server", args = "host, port, on_connection" } }
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/dns.lua
+Functions:
+{
+  { type = "function", line = 26, name = "DNS.resolve4", args = "domain, callback" },
+  { type = "function", line = 30, name = "DNS.resolve6", args = "domain, callback" },
+  { type = "function", line = 34, name = "DNS.resolveCname", args = "domain, callback" },
+  { type = "function", line = 38, name = "DNS.resolveNs", args = "domain, callback" },
+  { type = "function", line = 42, name = "DNS.resolveSrv", args = "domain, callback" },
+  { type = "function", line = 46, name = "DNS.resolveTxt", args = "domain, callback" },
+  { type = "function", line = 50, name = "DNS.resolveMx", args = "domain, callback" },
+  { type = "function", line = 54, name = "DNS.reverse", args = "ip, callback" },
+  { type = "function", line = 58, name = "DNS.resolve", args = "domain, rrtype, callback" },
+  { type = "function", line = 74, name = "DNS.lookup", args = "domain, family, callback" },
+  { type = "function", line = 108, name = "DNS.isIP", args = "ip" },
+  { type = "function", line = 112, name = "DNS.isIPv4", args = "ip" },
+  { type = "function", line = 116, name = "DNS.isIPv6", args = "ip" }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/fiber.lua
+Functions:
+{ { type = "function", line = 22, name = "Fiber:new", args = "fn" } }
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/json.lua
+Functions:
+{ { type = "function", line = 25, name = "JSON.parse", args = "string, options" }, { type = "function", line = 83, name = "JSON.stringify", args = "value, options" } }
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/fs.lua
+Functions:
+{
+  { line = 93, args = "path, callback", type = "function", comment = "Wrap the core fs functions in forced sync and async versions", name = "FS.exists" },
+  { type = "function", line = 105, name = "FS.exists_sync", args = "path" },
+  { line = 128, args = "path, options", type = "function", comment = "TODO: Implement backpressure here and in tcp streams", name = "FS.create_read_stream" },
+  { type = "function", line = 173, name = "FS.create_write_stream", args = "path, options" },
+  { type = "function", line = 183, name = "FS.read_file_sync", args = "path" },
+  { type = "function", line = 200, name = "FS.read_file", args = "path, callback" },
+  { type = "function", line = 214, name = "FS.write_file", args = "path, data, callback" }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{
+  { type = "comment", line = 51, text = "Default callback if one isn't given for async operations" },
+  { type = "comment", comment = "Default callback if one isn't given for async operations", line = 56, text = "Wrap the core fs functions in forced sync and async versions" },
+  { type = "comment", line = 127, text = "TODO: Implement backpressure here and in tcp streams" }
+}
+/home/dvv/LUVIT/luvit/lib/repl.lua
+Functions:
+{ { type = "function", line = 40, name = "Repl.evaluate_line", args = "line" }, { type = "function", line = 81, name = "Repl.start", args = "" } }
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/timer.lua
+Functions:
+{
+  { type = "function", line = 47, name = "Timer:set_timeout", args = "duration, callback, ..." },
+  { type = "function", line = 57, name = "Timer:set_interval", args = "period, callback, ..." },
+  { type = "function", line = 66, name = "Timer:clear_timer", args = "timer" }
+}
+Properties:
+{  }
+Variables:
+{ { line = 21, value = "Handle", type = "variable", name = "Timer", extends = "handle" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/buffer.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 29, value = "Object", type = "variable", name = "Buffer", extends = "object" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/object.lua
+Functions:
+{
+  { line = 24, args = "...", type = "function", comment = "Create a new instance of the class. Call the initializer if there is one.", name = "Object:new" },
+  { line = 35, args = "", type = "function", comment = "Create a new subclass that inherits both Class methods and instance methods", name = "Object:extend" }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{
+  { type = "comment", line = 19, text = "The base Class that provides the mini Luvit OOP system for Lua" },
+  { type = "comment", line = 23, text = "Create a new instance of the class. Call the initializer if there is one." },
+  { type = "comment", line = 34, text = "Create a new subclass that inherits both Class methods and instance methods" },
+  { type = "comment", line = 46, text = "Sample Usage." },
+  {
+    type = "comment",
+    comment = "Sample Usage.",
+    line = 73,
+    text = "p("Object", Object)\nRectangle = Object:extend()\nfunction Rectangle.prototype:initialize(w, h)\n  self.w = w\n  self.h = h\nend\nfunction Rectangle.prototype:area()\n  return self.w * self.h\nend\np("Rectangle", Rectangle)\nrect = Rectangle:new(2, 3)\np("rect", rect)\nSquare = Rectangle:extend()\nfunction Square.prototype:initialize(w)\n  self.w = w\n  self.h = w\nend\np("Square", Square)\nsquare = Square:new(5)\np("square", square)\np("square:area()", square:area())"
+  }
+}
+/home/dvv/LUVIT/luvit/lib/response.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 24, value = "Emitter", type = "variable", name = "Response", extends = "emitter" } }
+Comments:
+{
+  { type = "comment", line = 91, text = "Fall back inheritance to the socket's methods" },
+  { type = "comment", comment = "Fall back inheritance to the socket's methods", line = 108, text = "This sets a header, replacing any header with the same name (case insensitive)" },
+  {
+    type = "comment",
+    comment = "This sets a header, replacing any header with the same name (case insensitive)",
+    line = 122,
+    text = "Adds a header line.  This does not replace any header by the same name and\nallows duplicate headers.  Returns the index it was inserted at"
+  },
+  {
+    type = "comment",
+    comment = "Adds a header line.  This does not replace any header by the same name and\nallows duplicate headers.  Returns the index it was inserted at",
+    line = 129,
+    text = "Removes a set header.  Cannot remove headers added with :add_header"
+  }
+}
+/home/dvv/LUVIT/luvit/lib/net.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 30, value = "Emitter", type = "variable", name = "Server", extends = "emitter" }, { line = 91, value = "Emitter", type = "variable", name = "Socket", extends = "emitter" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/stream.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 21, value = "Handle", type = "variable", name = "Stream", extends = "handle" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/url.lua
+Functions:
+{ { type = "function", line = 21, name = "Url.parse", args = "url" } }
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/path.lua
+Functions:
+{
+  { line = 55, args = "path", type = "function", comment = "Modifies an array of path parts in place by interpreting "." and ".." segments", name = "Path.normalize" },
+  { type = "function", line = 81, name = "Path.join", args = "..." },
+  { type = "function", line = 85, name = "Path.resolve", args = "root, path" },
+  { type = "function", line = 92, name = "Path.dirname", args = "path" },
+  { type = "function", line = 110, name = "Path.basename", args = "path, expected_ext" },
+  { type = "function", line = 114, name = "Path.extname", args = "path" }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{
+  { type = "comment", line = 23, text = "Split a filename into [root, dir, basename], unix version\n'root' is just a slash, or nothing." },
+  {
+    type = "comment",
+    comment = "Split a filename into [root, dir, basename], unix version\n'root' is just a slash, or nothing.",
+    line = 38,
+    text = "Modifies an array of path parts in place by interpreting "." and ".." segments"
+  }
+}
+/home/dvv/LUVIT/luvit/lib/luvit.lua
+Functions:
+{
+  { type = "function", line = 72, name = "process.exit", args = "exit_code" },
+  { type = "function", line = 77, name = "process:add_handler_type", args = "name" },
+  { type = "function", line = 85, name = "process:missing_handler_type", args = "name, ..." }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{
+  { type = "comment", line = 20, text = "clear some globals\nThis will break lua code written for other lua runtimes" },
+  { type = "comment", line = 35, text = "Load libraries used in this file" },
+  { type = "comment", line = 47, text = "Copy date and binding over from lua os module into luvit os module" },
+  { type = "comment", line = 100, text = "Hide some stuff behind a metatable" },
+  { type = "comment", comment = "Hide some stuff behind a metatable", line = 111, text = "Ignore sigpipe and exit cleanly on SIGINT and SIGTERM\nThese shouldn't hold open the event loop" },
+  {
+    type = "comment",
+    comment = "Ignore sigpipe and exit cleanly on SIGINT and SIGTERM\nThese shouldn't hold open the event loop",
+    line = 122,
+    text = "Load the tty as a pair of pipes\nBut don't hold the event loop open for them"
+  },
+  { type = "comment", line = 130, text = "Replace print" },
+  { type = "comment", comment = "Replace print", line = 142, text = "A nice global data dumper" },
+  { type = "comment", comment = "A nice global data dumper", line = 155, text = "Like p, but prints to stderr using blocking I/O for better debugging" },
+  { type = "comment", comment = "Like p, but prints to stderr using blocking I/O for better debugging", line = 168, text = "Add global access to the environment variables using a dynamic table" },
+  { type = "comment", line = 194, text = "This is called by all the event sources from C\nThe user can override it to hook into event sources" },
+  { type = "comment", comment = "This is called by all the event sources from C\nThe user can override it to hook into event sources", line = 272, text = "tries to load a module at a specified absolute path" },
+  { type = "comment", comment = "tries to load a module at a specified absolute path", line = 300, text = "Remove the cwd based loaders, we don't want them" },
+  { type = "comment", line = 442, text = "Start the event loop" },
+  { type = "comment", comment = "Start the event loop", line = 444, text = "trigger exit handlers and exit cleanly" }
+}
+/home/dvv/LUVIT/luvit/lib/handle.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 22, value = "Emitter", type = "variable", name = "Handle", extends = "emitter" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/pipe.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 22, value = "Stream", type = "variable", name = "Pipe", extends = "stream" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/stack.lua
+Functions:
+{
+  { type = "function", line = 22, name = "Stack.stack", args = "..." },
+  { line = 49, args = "...", type = "function", comment = "Build a composite stack made of several layers", name = "Stack.compose" },
+  { line = 76, args = "mountpoint, ...", type = "function", comment = "Mounts a substack app at a url subtree", name = "Stack.mount" },
+  { type = "function", line = 88, name = "Stack.translate", args = "mountpoint, matchpoint, ..." },
+  { type = "function", line = 114, name = "Stack.errorHandler", args = "req, res, err" }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{ { type = "comment", line = 48, text = "Build a composite stack made of several layers" }, { type = "comment", line = 75, text = "Mounts a substack app at a url subtree" } }
+/home/dvv/LUVIT/luvit/lib/tcp.lua
+Functions:
+{ { type = "function", line = 71, name = "Tcp:create_server", args = "ip, port, on_connection" } }
+Properties:
+{  }
+Variables:
+{ { line = 23, value = "Stream", type = "variable", name = "Tcp", extends = "stream" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/watcher.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 21, value = "Handle", type = "variable", name = "Watcher", extends = "handle" } }
+Comments:
+{  }
+/home/dvv/LUVIT/luvit/lib/emitter.lua
+Functions:
+{  }
+Properties:
+{  }
+Variables:
+{ { line = 22, value = "Object", type = "variable", name = "Emitter", extends = "object" } }
+Comments:
+{
+  { type = "comment", line = 24, text = "By default, and error events that are not listened for should thow errors" },
+  { type = "comment", comment = "By default, and error events that are not listened for should thow errors", line = 33, text = "Sugar for emitters you want to auto-remove themself after first event" },
+  { type = "comment", comment = "Sugar for emitters you want to auto-remove themself after first event", line = 43, text = "Add a new typed event emitter" },
+  { type = "comment", comment = "Add a new typed event emitter", line = 98, text = "Register a bound version of a method and route errors" }
+}
+/home/dvv/LUVIT/luvit/lib/querystring.lua
+Functions:
+{
+  { line = 38, args = "str", type = "function", comment = "decode %XX sequences\ninto corresponding\ncharacters.\nthis comment\nis\nfor purpose of documentation", name = "querystring.urldecode" },
+  { line = 53, args = "str", type = "function", comment = "this comment\nis\nfor purpose of documentation", name = "querystring.urlencode" },
+  { line = 68, args = "str, sep, eq", type = "function", comment = "parse querystring into table.\nurldecode tokens.", name = "querystring.parse" }
+}
+Properties:
+{  }
+Variables:
+{  }
+Comments:
+{
+  { type = "comment", line = 20, text = "querystring helpers" },
+  { type = "comment", line = 37, text = "decode %XX sequences\ninto corresponding\ncharacters.\nthis comment\nis\nfor purpose of documentation" },
+  { type = "comment", line = 48, text = "encode non-printable characters\ninto sequences of %XX" },
+  { type = "comment", comment = "encode non-printable characters\ninto sequences of %XX", line = 52, text = "this comment\nis\nfor purpose of documentation" },
+  { type = "comment", line = 67, text = "parse querystring into table.\nurldecode tokens." },
+  { type = "comment", line = 85, text = "module" }
+}

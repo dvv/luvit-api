@@ -1,0 +1,48 @@
+{#DEF('article')}
+<article id="{name}">
+{#IF(not args)}
+<h1 class="title">{kind} {{basename(name)}}</h1>
+{/IF}
+{#IF(args)}
+<h1 class="title"><code>{kind} {{methodname(name)}}({args})</code></h1>
+{/IF}
+{#IF(href)}<p class="source-href"><a href="{href}">View source</a></p>{/IF}
+{#IF(extends)}<p class="inheritance">Extends <a href="#{extends}">{{basename(extends)}}</a></p>{/IF}
+{#IF(doc)}<p class="comment">{doc}</p>{/IF}
+<div class="children">
+{#LOOP(children)}
+{USE('article', locals)}
+{/LOOP}
+</div>
+</article>
+{/DEF}
+<!doctype html>
+<html>
+<head>
+<style>
+* {
+  font-family: Verdana;
+}
+article {
+  margin: 10px;
+  border: 1px solid red;
+  padding: 10px;
+}
+p.comment {
+  border: 1px solid gray;
+  padding: 10px;
+}
+p.source-href {
+  font-size: 70%;
+}
+code {
+  font: Courier New Cyr 10px;
+}
+</style>
+</head>
+<body>
+{#LOOP(tree)}
+{USE('article', locals)}
+{/LOOP}
+</body>
+</html>

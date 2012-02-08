@@ -1,2 +1,2 @@
 #!/bin/sh
-../api.lua --href_prefix='../../../luvit/luvit/blob/master/lib/' ../../luvit/lib/*.lua >api.markdown
+../api.lua --href_prefix='https://github.com/luvit/luvit/blob/master/lib/' --format=html ../../luvit/lib/*.lua >api.html
